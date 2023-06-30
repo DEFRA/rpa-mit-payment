@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "QueueConnectionString": "__QUEUECONNECTIONSTRING__",
+    "TableConnectionString": "__TABLECONNECTIONSTRING__",
+    "BlobConnectionString": "__BLOBCONNECTIONSTRING__",
+    "PaymentBlobContainer": "__PAYMENTBLOBCONTAINER__",
+    "Schemes": "__SCHEMES__"
+  }
+}
+  
