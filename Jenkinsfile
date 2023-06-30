@@ -1,7 +1,7 @@
  @Library('defra-library@v-9') _
 
- buildDotNetCore project: 'RPA.MIT.Payment.Function'
+ buildDotNetCore project: 'EST.MIT.Payment.Function.csproj'
 
  @Library('defra-library@v-9') _
 
- buildDotNetFunction project: 'RPA.MIT.Payment.Function'
+ buildDotNetFunction project: 'EST.MIT.Payment.Function.csproj'
