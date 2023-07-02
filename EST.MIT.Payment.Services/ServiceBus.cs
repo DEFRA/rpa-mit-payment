@@ -25,7 +25,7 @@ namespace EST.MIT.Payment.Services
 
             ServiceBusMessage message = new(Encoding.UTF8.GetBytes(serviceBus));
 
-            await sender.SendMessageAsync(message);
+            await sender.SendMessageAsync(message,default);
 
             await sender.DisposeAsync();
             await client.DisposeAsync();
