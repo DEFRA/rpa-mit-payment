@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  est-mit-payment:
+    build:
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./EST.MIT.Payment.Function:/home/dotnet/EST.MIT.Payment.Function
+      - ./EST.MIT.Payment.Function.Tests:/home/dotnet/EST.MIT.Payment.Function.Tests

@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  est-mit-payment:
+    build:
+      target: development
+    container_name: est-mit-payment
+    entrypoint: dotnet watch --project ./EST.MIT.Payment.Function.Test test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'
