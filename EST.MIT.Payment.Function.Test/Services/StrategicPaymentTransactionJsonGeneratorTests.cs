@@ -12,11 +12,8 @@ public class StrategicPaymentTransactionJsonGeneratorTests
 {
     private readonly IStrategicPaymentTransactionJsonGenerator _generator;
     private readonly Mock<IConfiguration> _mockConfiguration;
-
-
     private readonly Mock<ServiceBusClient> _mockServiceBusClient;
     private readonly Mock<ServiceBusSender> _mockServiceBusSender;
-
 
     public StrategicPaymentTransactionJsonGeneratorTests()
     {
@@ -26,7 +23,6 @@ public class StrategicPaymentTransactionJsonGeneratorTests
         _mockConfiguration.Setup(x => x["QueueName"]).Returns("paymentgeneratorqueue");
         _mockServiceBusClient = new Mock<ServiceBusClient>();
         _mockServiceBusSender = new Mock<ServiceBusSender>();
-
     }
 
     [Fact]
@@ -118,6 +114,5 @@ public class StrategicPaymentTransactionJsonGeneratorTests
         _mockServiceBusClient.Setup(x => x.DisposeAsync()).Returns(ValueTask.CompletedTask);
 
         await _generator.Send(paymentTransaction);
-
     }
 }
