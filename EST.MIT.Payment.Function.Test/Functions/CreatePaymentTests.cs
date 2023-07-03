@@ -14,14 +14,12 @@ public class CreatePaymentTests
     private readonly Mock<IDurableOrchestrationClient> _mockDurableOrchestrationClient;
     private readonly Mock<IBinder> _mockBinder;
     private readonly Mock<ILogger> _mockLogger;
-    private readonly Mock<IServiceBus> _mockServiceBus;
     private readonly Mock<IEventQueueService> _mockEventQueueService;
 
     public CreatePaymentTests()
     {
-        _mockServiceBus = new Mock<IServiceBus>();
         _mockEventQueueService = new Mock<IEventQueueService>();
-        _createPayment = new CreatePayment(_mockServiceBus.Object, _mockEventQueueService.Object);
+        _createPayment = new CreatePayment(_mockEventQueueService.Object);
         _mockDurableOrchestrationClient = new Mock<IDurableOrchestrationClient>();
         _mockBinder = new Mock<IBinder> { CallBase = true };
         _mockLogger = new Mock<ILogger>();

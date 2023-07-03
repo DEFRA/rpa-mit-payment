@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using EST.MIT.Payment.Models;
 
 namespace EST.MIT.Payment.Interfaces
 {

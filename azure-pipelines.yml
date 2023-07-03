@@ -1,12 +1,8 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 pool:
-  vmImage: ubuntu-22.04
+  vmImage: ubuntu-latest
 
 variables:
+  system.debug: true
   buildConfiguration: 'Release'
   ${{ if eq(variables['Build.Reason'], 'IndividualCI') }}: 
     additionalSonarParams: 'sonar.branch.name=$(Build.SourceBranchName)'

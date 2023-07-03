@@ -3,7 +3,6 @@ using Azure.Storage.Blobs;
 using Azure;
 using Microsoft.Extensions.Logging;
 using System.Text;
-using Azure.Storage.Blobs.Models;
 
 namespace EST.MIT.Payment.DataAccess;
 public class PaymentAuditRepository : IPaymentAuditRepository

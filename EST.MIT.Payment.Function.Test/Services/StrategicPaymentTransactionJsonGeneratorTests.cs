@@ -14,15 +14,18 @@ public class StrategicPaymentTransactionJsonGeneratorTests
     private readonly Mock<IConfiguration> _mockConfiguration;
     private readonly Mock<ServiceBusClient> _mockServiceBusClient;
     private readonly Mock<ServiceBusSender> _mockServiceBusSender;
+    private readonly ServiceBusMessage _serviceBusMessage;
 
     public StrategicPaymentTransactionJsonGeneratorTests()
     {
         _mockConfiguration = new Mock<IConfiguration>();
-        _generator = new StrategicPaymentTransactionJsonGenerator(_mockConfiguration.Object);
-        _mockConfiguration.Setup(x => x["ConnectionString"]).Returns("Endpoint=sb://paymentgenerator.servicebus.windows.net/;SharedAccessKeyName=SenderPolicy;SharedAccessKey=eCcIV666vfuLtjU4dtBk0xqS1oZFF7AlT+ASbJo2sV0=");
-        _mockConfiguration.Setup(x => x["QueueName"]).Returns("paymentgeneratorqueue");
         _mockServiceBusClient = new Mock<ServiceBusClient>();
         _mockServiceBusSender = new Mock<ServiceBusSender>();
+        _serviceBusMessage = new ServiceBusMessage();
+        _generator = new StrategicPaymentTransactionJsonGenerator(_mockConfiguration.Object, _mockServiceBusClient.Object, _serviceBusMessage);
+        _mockConfiguration.Setup(x => x["ConnectionString"]).Returns("Endpoint=sb://paymentgenerator.servicebus.windows.net/;SharedAccessKeyName=SenderPolicy;SharedAccessKey=eCcIV666vfuLtjU4dtBk0xqS1oZFF7AlT+ASbJo2sV0=");
+        _mockConfiguration.Setup(x => x["QueueName"]).Returns("paymentgeneratorqueue");
+
     }
 
     [Fact]

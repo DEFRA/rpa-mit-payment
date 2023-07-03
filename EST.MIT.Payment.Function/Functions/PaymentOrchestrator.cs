@@ -30,6 +30,7 @@ public class PaymentOrchestrator
         {
             await context.CallActivityAsync("ExecuteStrategicPayments", invoiceScheme);
             log.LogInformation("Executing Strategic Payments...");
+            await context.CallActivityAsync("ExecuteServiceBusForSPS", invoiceScheme);
         }
         else
         {

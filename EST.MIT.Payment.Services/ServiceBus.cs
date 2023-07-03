@@ -1,34 +1,56 @@
 ﻿using Azure.Messaging.ServiceBus;
 using EST.MIT.Payment.Interfaces;
-using Microsoft.Extensions.Configuration;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EST.MIT.Payment.Services
 {
     public class ServiceBus : IServiceBus
     {
-        private readonly IConfiguration _configuration;
+        private ServiceBusSender _sender = default!;
 
-        public ServiceBus(IConfiguration configuration)
+        private ServiceBusMessage _message;
+
+        private readonly string _queueName;
+
+        private readonly ServiceBusClient _client;
+
+        public ServiceBus(string queueName, ServiceBusClient client, ServiceBusMessage message)
         {
-            _configuration = configuration;
+            _queueName = queueName;
+
+            _client = client;
+
+            _message = message;
         }
+
         public async Task SendServiceBus(string serviceBus)
         {
-            var connectionString = _configuration["ConnectionString"];
-            var queueName = _configuration["QueueName"];
+            try
+            {
+                _sender = _client.CreateSender(_queueName);
 
-            await using var client = new ServiceBusClient(connectionString);
+                _message = new(Encoding.UTF8.GetBytes(serviceBus));
 
-            ServiceBusSender sender = client.CreateSender(queueName);
+                await _sender.SendMessageAsync(_message);
+            }
 
-            ServiceBusMessage message = new(Encoding.UTF8.GetBytes(serviceBus));
+            catch (ServiceBusException ex) when
+            (ex.Reason == ServiceBusFailureReason.MessagingEntityNotFound)
+            {
+                return;
+            }
 
-            await sender.SendMessageAsync(message);
+            catch (ServiceBusException ex) when
+            (ex.Reason == ServiceBusFailureReason.ServiceTimeout)
+            {
+                return;
+            }
 
-            await sender.DisposeAsync();
-            await client.DisposeAsync();
+            catch (ServiceBusException ex) when
+            (ex.Reason == ServiceBusFailureReason.MessageSizeExceeded)
+            {
+                return;
+            }
         }
     }
 }
