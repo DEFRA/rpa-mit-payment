@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using EST.MIT.Payment.Models;
 using Newtonsoft.Json;
 
 namespace EST.MIT.Payment.Models;

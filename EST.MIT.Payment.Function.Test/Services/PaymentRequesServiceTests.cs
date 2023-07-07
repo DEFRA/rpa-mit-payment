@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EST.MIT.Payment.Models;
 using EST.MIT.Payment.Services;
-using Xunit;
 
 namespace EST.MIT.Payment.Function.Test.Services;
 

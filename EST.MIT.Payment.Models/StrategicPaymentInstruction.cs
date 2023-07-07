@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace EST.MIT.Payment.Models;
 
 public class StrategicPaymentInstruction

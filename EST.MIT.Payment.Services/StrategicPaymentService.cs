@@ -1,4 +1,3 @@
-using System;
 using EST.MIT.Payment.Interfaces;
 
 namespace EST.MIT.Payment.Services;

@@ -1,30 +1,32 @@
 ﻿using Azure.Messaging.ServiceBus;
+using EST.MIT.Payment.Function.Functions;
 using EST.MIT.Payment.Models;
 using EST.MIT.Payment.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 
-namespace EST.MIT.Payment.Function.Test.Services
+namespace EST.MIT.Payment.Function.Test.Functions
 {
-    public class ServiceBusTests
+    public class StrategicPaymentsResponseServiceTests
     {
         private readonly ServiceBus _serviceBus;
+        private readonly Mock<ILogger> _mockLogger;
+        private readonly InvoiceScheme _invoiceScheme;
         private readonly Mock<ServiceBusClient> _mockServiceBusClient;
         private readonly Mock<ServiceBusSender> _mockServiceBusSender;
+        private readonly StrategicPaymentsResponseService _strategicPaymentsResponseService;
         private readonly Mock<ServiceBusMessage> _mockServiceBusMessage;
 
-        public ServiceBusTests()
+        public StrategicPaymentsResponseServiceTests()
         {
+            _mockLogger = new Mock<ILogger>();
             _mockServiceBusClient = new Mock<ServiceBusClient>();
             _mockServiceBusSender = new Mock<ServiceBusSender>();
             _mockServiceBusMessage = new Mock<ServiceBusMessage>();
-            _serviceBus = new ServiceBus("queueName", _mockServiceBusClient.Object, _mockServiceBusMessage.Object);
-        }
+            _serviceBus = new ServiceBus("paymentgeneratorqueue", _mockServiceBusClient.Object, _mockServiceBusMessage.Object);
+            _strategicPaymentsResponseService = new StrategicPaymentsResponseService(_serviceBus);
 
-        [Fact]
-        public async Task Test_Create_Service_Bus()
-        {
-            var paymentRequest = new InvoiceScheme()
+            _invoiceScheme = new InvoiceScheme()
             {
                 Invoices = new List<Invoice>()
                 {
@@ -76,17 +78,36 @@ namespace EST.MIT.Payment.Function.Test.Services
                 },
                 SchemeType = "AD"
             };
+        }
 
-            _mockServiceBusClient.Setup(x => x.CreateSender(It.IsAny<string>()))
-                                            .Returns(_mockServiceBusSender.Object);
+        [Fact]
+        public async void ServiceBusException_Thrown_When_ServiceBusFailureReason_Is_MessagingEntityNotFound()
+        {
+            _mockServiceBusClient.Setup(x => x.CreateSender(It.IsAny<string>())).Returns(_mockServiceBusSender.Object);
 
-            string message = JsonConvert.SerializeObject(paymentRequest);
+            _mockServiceBusSender.Setup(x => x.SendMessageAsync(It.IsAny<ServiceBusMessage>(), default)).ThrowsAsync(new ServiceBusException("EntityNotFound", ServiceBusFailureReason.MessagingEntityNotFound));
 
-            ServiceBusMessage serviceBusMessage = new ServiceBusMessage();
+            await _strategicPaymentsResponseService.ExecuteServiceBusForSPS(_invoiceScheme, _mockLogger.Object);
+        }
 
-            _mockServiceBusSender.Setup(x => x.SendMessageAsync(serviceBusMessage, default)).Returns(Task.CompletedTask);
+        [Fact]
+        public async void ServiceBusException_Thrown_When_ServiceBusFailureReason_Is_ServiceTimeout()
+        {
+            _mockServiceBusClient.Setup(x => x.CreateSender(It.IsAny<string>())).Returns(_mockServiceBusSender.Object);
 
-            await _serviceBus.SendServiceBus(message);
+            _mockServiceBusSender.Setup(x => x.SendMessageAsync(It.IsAny<ServiceBusMessage>(), default)).ThrowsAsync(new ServiceBusException("ServiceTimeOut", ServiceBusFailureReason.ServiceTimeout));
+
+            await _strategicPaymentsResponseService.ExecuteServiceBusForSPS(_invoiceScheme, _mockLogger.Object);
+        }
+
+        [Fact]
+        public async void ServiceBusException_Thrown_When_ServiceBusFailureReason_Is_MessageSizeExceeded()
+        {
+            _mockServiceBusClient.Setup(x => x.CreateSender(It.IsAny<string>())).Returns(_mockServiceBusSender.Object);
+
+            _mockServiceBusSender.Setup(x => x.SendMessageAsync(It.IsAny<ServiceBusMessage>(), default)).ThrowsAsync(new ServiceBusException("Servi", ServiceBusFailureReason.MessageSizeExceeded));
+
+            await _strategicPaymentsResponseService.ExecuteServiceBusForSPS(_invoiceScheme, _mockLogger.Object);
         }
     }
 }

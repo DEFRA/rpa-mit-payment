@@ -7,17 +7,13 @@ using EST.MIT.Payment.Models;
 using EST.MIT.Payment.Interfaces;
 using EST.MIT.Payment.Function.Util;
 using EST.MIT.Payment.Function.Validation;
-using System.Linq;
 
 namespace EST.MIT.Payment.Function.Functions;
 public class CreatePayment
 {
-    private readonly IServiceBus _serviceBus;
     private readonly IEventQueueService _eventQueueService;
-
-    public CreatePayment(IServiceBus serviceBus, IEventQueueService eventQueueService)
+    public CreatePayment(IEventQueueService eventQueueService)
     {
-        _serviceBus = serviceBus;
         _eventQueueService = eventQueueService;
     }
 
@@ -28,8 +24,6 @@ public class CreatePayment
     IBinder blobBinder,
     ILogger log)
     {
-        await _serviceBus.SendServiceBus(paymentRequestMsg);
-
         log.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
 
         InvoiceScheme invoiceScheme;
