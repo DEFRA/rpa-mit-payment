@@ -22,6 +22,11 @@ public class StrategicPaymentTransactionJsonGenerator : IStrategicPaymentTransac
 
     public string Generate(StrategicPaymentTransaction strategicPaymentTransaction)
     {
+        if (strategicPaymentTransaction.paymentInstruction.Error != null)
+        {
+            return strategicPaymentTransaction.paymentInstruction.Error;
+        }
+
         var jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -32,10 +37,19 @@ public class StrategicPaymentTransactionJsonGenerator : IStrategicPaymentTransac
 
     public async Task Send(StrategicPaymentTransaction strategicPayment)
     {
+ 
         var payment = Generate(strategicPayment);
 
         var transaction = new ServiceBus(_configuration["QueueName"], _serviceBusClient, _serviceBusMessage);
 
         await transaction.SendServiceBus(payment);
+    }
+
+    public async Task SendError(StrategicPaymentTransaction strategicPayment)
+    {
+        var payment = Generate(strategicPayment);
+
+        var errorMessage = new ServiceBus(_configuration["QueueNameError"], _serviceBusClient, _serviceBusMessage);
+        await errorMessage.SendServiceBus(payment);
     }
 }
