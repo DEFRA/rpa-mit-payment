@@ -179,8 +179,7 @@ public class StrategicPaymentTransactionJsonGeneratorTests
         var errorMessage = _generator.Generate(paymentTransaction);
         Assert.Equal(errorMessage, paymentTransaction.paymentInstruction.Error);
         Assert.False(paymentTransaction.Accepted);
-        Assert.Null(paymentTransaction.paymentInstruction.PaymentDetails);
-        Assert.True(paymentTransaction?.paymentInstruction?.PaymentDetails?.Count < 1);
+        Assert.Null(paymentTransaction.paymentInstruction.PaymentDetails);       
     }
 
     [Fact]
