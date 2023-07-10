@@ -24,6 +24,8 @@ public class StrategicPaymentTransactionJsonGenerator : IStrategicPaymentTransac
     {
         if (strategicPaymentTransaction.paymentInstruction.Error != null)
         {
+            strategicPaymentTransaction.Accepted = false;
+
             return strategicPaymentTransaction.paymentInstruction.Error;
         }
 
