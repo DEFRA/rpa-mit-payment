@@ -17,4 +17,5 @@ public class StrategicPaymentInstruction
     public string DeliveryBody { get; set; } = default!;
     public DateTime DueDate { get; set; }
     public string Currency { get; set; } = default!;
+    public string? Error { get; set; }  
 }
