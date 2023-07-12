@@ -1,11 +1,18 @@
-version: '3.8'
-
 services:
   est-mit-payment:
     build:
       context: .
-      target: production
     image: est-mit-payment
     container_name: est-mit-payment
-    environment:
-      COMPlus_EnableDiagnostics: 0
+
+# version: '3.8'
+
+# services:
+#   est-mit-payment:
+#     build:
+#       context: .
+#       target: production
+#     image: est-mit-payment
+#     container_name: est-mit-payment
+#     environment:
+#       COMPlus_EnableDiagnostics: 0
