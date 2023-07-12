@@ -4,8 +4,8 @@ services:
   est-mit-payment:
     build:
       target: development
-    image: rpa-mit-reference-data-development
-    container_name: rpa-mit-reference-data-test
+    image: est-mit-payment
+    container_name: est-mit-payment-test
     entrypoint: dotnet test ./EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'
     volumes:
-      - ./test-output:/home/dotnet/RPA.MIT.ReferenceData.Api.Test/test-output
+      - ./test-output:/home/dotnet/EST.MIT.Payment.Function.Test/test-output
