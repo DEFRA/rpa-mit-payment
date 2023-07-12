@@ -5,10 +5,14 @@ services:
     build:
       target: development
 <<<<<<< HEAD
+<<<<<<< HEAD
     image: est-mit-payment
 =======
     image: est-mit-payment-development
 >>>>>>> 8566695c4f39a550e6fa9b9dd3e9ff7a5ac590fd
+=======
+    image: est-mit-payment-development
+>>>>>>> ab9a2e6becbf5a2c77239095cc65ec0cb6fa3508
     container_name: est-mit-payment-test
     entrypoint: dotnet test ./EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'
     volumes:
