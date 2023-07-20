@@ -4,8 +4,10 @@ services:
   est-mit-payment:
     build:
       target: development
-    image: est-mit-payment
+    image: est-mit-payment-development
     container_name: est-mit-payment-test
     entrypoint: dotnet test ./EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'
     volumes:
-      - ./test-output:/home/dotnet/EST.MIT.Payment.Function.Test/test-output
+      - ./EstMitPaymentService:/home/dotnet/EstMitPaymentService
+      - ./EstMitPaymentService.Tests:/home/dotnet/EstMitPaymentService.Tests
+      - ./test-output:/home/dotnet/EstMitPaymentService.Tests/test-output

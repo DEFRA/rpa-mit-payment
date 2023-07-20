@@ -3,17 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EST.MIT.Payment.Function", "EST.MIT.Payment.Function\EST.MIT.Payment.Function.csproj", "{2CA96C4C-A24F-492A-9573-590415A20C99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Function", "EST.MIT.Payment.Function\EST.MIT.Payment.Function.csproj", "{2CA96C4C-A24F-492A-9573-590415A20C99}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Function.Test", "EST.MIT.Payment.Function.Test\EST.MIT.Payment.Function.Test.csproj", "{2D756AFE-5497-4339-90D9-50DA93BFA8C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EST.MIT.Payment.Interfaces", "EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj", "{096BDF32-8632-4DD9-976C-975B03412821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Interfaces", "EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj", "{096BDF32-8632-4DD9-976C-975B03412821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EST.MIT.Payment.DataAccess", "EST.MIT.Payment.DataAccess\EST.MIT.Payment.DataAccess.csproj", "{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.DataAccess", "EST.MIT.Payment.DataAccess\EST.MIT.Payment.DataAccess.csproj", "{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EST.MIT.Payment.Models", "EST.MIT.Payment.Models\EST.MIT.Payment.Models.csproj", "{0A8EC5B3-00F6-43DD-BBFA-D14D033A48BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Models", "EST.MIT.Payment.Models\EST.MIT.Payment.Models.csproj", "{0A8EC5B3-00F6-43DD-BBFA-D14D033A48BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EST.MIT.Payment.Services", "EST.MIT.Payment.Services\EST.MIT.Payment.Services.csproj", "{45768B0D-FA4F-4B9A-8236-6743471E2D51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Services", "EST.MIT.Payment.Services\EST.MIT.Payment.Services.csproj", "{45768B0D-FA4F-4B9A-8236-6743471E2D51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F72B097F-2D8C-4F9F-AAFD-3A95EF57515C}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\EST.MIT.Payment\azure-pipelines.yml = ..\..\EST.MIT.Payment\azure-pipelines.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
