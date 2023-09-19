@@ -28,34 +28,26 @@ namespace EST.MIT.Payment.Function.Test.Functions
 
             _invoiceScheme = new InvoiceScheme()
             {
-                Invoices = new List<Invoice>()
+                PaymentRequestsBatches = new List<PaymentRequestsBatch>()
                 {
-                     new Invoice()
+                     new PaymentRequestsBatch()
                      {
                         Id = "1",
                         AccountType = "AD",
                         Created = DateTime.Now,
-                        CreatedBy = "henry",
-                        InvoiceType = "BP",
+                        CreatedBy = "henry", 
                         Organisation = "FGH",
                         PaymentRequests = new List<PaymentRequest>()
                         {
                             new PaymentRequest()
                             {
-                                AgreementNumber = "12345",
-                                AppendixReferences = new AppendixReferences()
-                                {
-                                     ClaimReferenceNumber = "CCCC"
-                                },
-                                ContractNumber = "07765432",
-                                DeliveryBody = "xyz",
+                                AgreementNumber = "12345", 
                                 DueDate = "string",
                                 FRN = 56789043,
                                 InvoiceLines = new List<InvoiceLine>()
                                 {
                                     new InvoiceLine()
-                                    {
-                                         Currency = "£",
+                                    {                                        
                                          Description = "This is a description",
                                          FundCode = "2ADC",
                                          SchemeCode = "D4ERT",

@@ -30,38 +30,33 @@ public class CreatePaymentTests
     {
         var paymentRequest = new InvoiceScheme()
         {
-            Invoices = new List<Invoice>()
+            PaymentRequestsBatches = new List<PaymentRequestsBatch>()
                 {
-                     new Invoice()
+                     new PaymentRequestsBatch()
                      {
                         Id = "1",
                         AccountType = "AD",
                         Created = DateTime.Now,
                         CreatedBy = "henry",
-                        InvoiceType = "BP",
                         Organisation = "FGH",
                         PaymentRequests = new List<PaymentRequest>()
                         {
                             new PaymentRequest()
                             {
                                 AgreementNumber = "12345",
-                                AppendixReferences = new AppendixReferences()
-                                {
-                                     ClaimReferenceNumber = "CCCC"
-                                },
-                                ContractNumber = "07765432",
-                                DeliveryBody = "xyz",
                                 DueDate = "string",
                                 FRN = 56789043,
                                 InvoiceLines = new List<InvoiceLine>()
                                 {
                                     new InvoiceLine()
                                     {
-                                         Currency = "£",
-                                         Description = "This is a description",
-                                         FundCode = "2ADC",
-                                         SchemeCode = "D4ERT",
-                                         Value = 3
+                                        DeliveryBody = "DeliveryBody",
+                                        MainAccount = "AccountA",
+                                        MarketingYear = 2022,
+                                        Description = "This is a description",
+                                        FundCode = "2ADC",
+                                        SchemeCode = "D4ERT",
+                                        Value = 3
                                     }
                                 },
                                 MarketingYear = 2023,
@@ -120,38 +115,33 @@ public class CreatePaymentTests
     {
         var InvalidPaymentRequest = new InvoiceScheme()
         {
-            Invoices = new List<Invoice>()
+            PaymentRequestsBatches = new List<PaymentRequestsBatch>()
             {
-                new Invoice()
+                new PaymentRequestsBatch()
                 {
                     Id = "1",
                     AccountType = "AD",
                     Created = DateTime.Now,
                     CreatedBy = "henry",
-                    InvoiceType = "BP",
                     Organisation = "FGH",
                     PaymentRequests = new List<PaymentRequest>()
                     {
                         new PaymentRequest()
                         {
                             AgreementNumber = "12345",
-                            AppendixReferences = new AppendixReferences()
-                            {
-                                    ClaimReferenceNumber = "CCCC"
-                            },
-                            ContractNumber = "07765432",
-                            DeliveryBody = "xyz",
                             DueDate = "string",
                             FRN = 56789043,
                             InvoiceLines = new List<InvoiceLine>()
                             {
                                 new InvoiceLine()
                                 {
-                                        Currency = "£",
-                                        Description = "This is a description",
-                                        FundCode = "2ADC",
-                                        SchemeCode = "D4ERT",
-                                        Value = 3
+                                    DeliveryBody = "DeliveryBody",
+                                    MainAccount = "AccountA",
+                                    MarketingYear = 2022,
+                                    Description = "This is a description",
+                                    FundCode = "2ADC",
+                                    SchemeCode = "D4ERT",
+                                    Value = 3
                                 }
                             },
                             MarketingYear = 2023,
