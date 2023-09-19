@@ -46,6 +46,21 @@ public static class ValidateRequest
                             ""sbi"": {
                             ""type"": ""integer""
                             },
+                            ""vendor"": {
+                            ""type"": ""string""
+                            },
+                            ""currency"": {
+                            ""type"": ""string""
+                            },
+                            ""description"": {
+                            ""type"": ""string""
+                            },
+                            ""originalInvoiceNumber"": {
+                            ""type"": ""string""
+                            },
+                            ""originalSettlementDate"": {
+                            ""type"": ""string""
+                            },
                             ""sourceSystem"": {
                             ""type"": ""string""
                             },
@@ -54,6 +69,12 @@ public static class ValidateRequest
                             }, 
                             ""paymentRequestNumber"": {
                             ""type"": ""integer""
+                            },
+                            ""invoiceCorrectionReference"": {
+                            ""type"": ""string""
+                            },
+                            ""recoveryDate"": {
+                            ""type"": ""string""
                             },
                             ""agreementNumber"": {
                             ""type"": ""string""
@@ -164,10 +185,7 @@ public static class ValidateRequest
     public static bool IsValid(string importRequest)
     {
         var schema = JSchema.Parse(schemaJson);
-        var parseImportRequest = JObject.Parse(importRequest);
-
-        parseImportRequest.IsValid(schema);
-
+        var parseImportRequest = JObject.Parse(importRequest);  
         return parseImportRequest.IsValid(schema);
     }
 }

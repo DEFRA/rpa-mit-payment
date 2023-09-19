@@ -63,7 +63,16 @@ public class CreatePaymentTests
                                 PaymentRequestId = "2",
                                 PaymentRequestNumber = 34567,
                                 SourceSystem = "sourceSystem",
-                                Value = 2
+                                Value = 2,
+                                Currency = "£",
+                                Description = "Description",
+                                InvoiceCorrectionReference = "ERQ567",
+                                OriginalInvoiceNumber = "23ER56",
+                                OriginalSettlementDate = "2022",
+                                RecoveryDate = "2023",
+                                SBI = 4567,
+                                Vendor = "A"
+
                             }
                         },
                         Reference = "123",
