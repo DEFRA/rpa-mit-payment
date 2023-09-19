@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using System.Collections.Generic;
 
 namespace EST.MIT.Payment.Function.Validation;
 
@@ -12,16 +13,13 @@ public static class ValidateRequest
             ""schemeType"": {
             ""type"": ""string""
             },
-            ""invoices"": {
+            ""paymentRequestsBatches"": {
             ""type"": ""array"",
             ""items"": [
                 {
                 ""type"": ""object"",
                 ""properties"": {
                     ""id"": {
-                    ""type"": ""string""
-                    },
-                    ""invoiceType"": {
                     ""type"": ""string""
                     },
                     ""accountType"": {
@@ -45,24 +43,21 @@ public static class ValidateRequest
                             ""frn"": {
                             ""type"": ""integer""
                             },
+                            ""sbi"": {
+                            ""type"": ""integer""
+                            },
                             ""sourceSystem"": {
                             ""type"": ""string""
                             },
                             ""marketingYear"": {
                             ""type"": ""integer""
-                            },
-                            ""deliveryBody"": {
-                            ""type"": ""string""
-                            },
+                            }, 
                             ""paymentRequestNumber"": {
                             ""type"": ""integer""
                             },
                             ""agreementNumber"": {
                             ""type"": ""string""
-                            },
-                            ""contractNumber"": {
-                            ""type"": ""string""
-                            },
+                            }, 
                             ""value"": {
                             ""type"": [""integer"", ""number""]
                             },
@@ -77,10 +72,7 @@ public static class ValidateRequest
                                 ""properties"": {
                                     ""value"": {
                                     ""type"": [""integer"", ""number""]
-                                    },
-                                    ""currency"": {
-                                    ""type"": ""string""
-                                    },
+                                    }, 
                                     ""schemeCode"": {
                                     ""type"": ""string""
                                     },
@@ -89,43 +81,41 @@ public static class ValidateRequest
                                     },
                                     ""fundCode"": {
                                     ""type"": ""string""
+                                    },
+                                    ""mainAccount"": {
+                                    ""type"": ""string""
+                                    },
+                                    ""deliveryBody"": {
+                                    ""type"": ""string""
+                                    },
+                                    ""marketingYear"": {
+                                    ""type"": ""integer""
                                     }
                                 },
                                 ""required"": [
-                                    ""value"",
-                                    ""currency"",
+                                    ""value"",                                   
                                     ""schemeCode"",
-                                    ""description"",
+                                    ""description"",                                   
+                                    ""mainAccount"",
+                                    ""deliveryBody"",
+                                    ""marketingYear"",
                                     ""fundCode""
                                 ]
                                 }
                             ]
-                            },
-                            ""appendixReferences"": {
-                            ""type"": ""object"",
-                            ""properties"": {
-                                ""claimReferenceNumber"": {
-                                ""type"": ""string""
-                                }
-                            },
-                            ""required"": [
-                                ""claimReferenceNumber""
-                            ]
                             }
-                        },
+                            },
                         ""required"": [
                             ""paymentRequestId"",
                             ""frn"",
+                            ""sbi"",
                             ""sourceSystem"",
-                            ""marketingYear"",
-                            ""deliveryBody"",
+                            ""marketingYear"", 
                             ""paymentRequestNumber"",
                             ""agreementNumber"",
-                            ""contractNumber"",
                             ""value"",
                             ""dueDate"",
-                            ""invoiceLines"",
-                            ""appendixReferences""
+                            ""invoiceLines"" 
                         ]
                         }
                     ]
@@ -150,8 +140,7 @@ public static class ValidateRequest
                     }
                 },
                 ""required"": [
-                    ""id"",
-                    ""invoiceType"",
+                    ""id"", 
                     ""accountType"",
                     ""organisation"",
                     ""schemeType"",
@@ -168,7 +157,7 @@ public static class ValidateRequest
             }
         },
         ""required"": [
-            ""invoices""
+            ""paymentRequestsBatches""
         ]
         }";
 
@@ -176,6 +165,9 @@ public static class ValidateRequest
     {
         var schema = JSchema.Parse(schemaJson);
         var parseImportRequest = JObject.Parse(importRequest);
+
+        parseImportRequest.IsValid(schema);
+
         return parseImportRequest.IsValid(schema);
     }
 }
