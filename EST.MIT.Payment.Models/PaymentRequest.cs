@@ -22,9 +22,9 @@ public class PaymentRequest
     [JsonProperty("originalInvoiceNumber")]
     public string OriginalInvoiceNumber { get; init; } = default!;  
     [JsonProperty("originalSettlementDate")]
-    public string OriginalSettlementDate { get; init; } = default!; 
+    public DateTime OriginalSettlementDate { get; init; } = default!; 
     [JsonProperty("recoveryDate")]
-    public string RecoveryDate { get; init; } = default!; 
+    public DateTime RecoveryDate { get; init; } = default!; 
     [JsonProperty("invoiceCorrectionReference")]
     public string InvoiceCorrectionReference { get; init; } = default!;  
     [JsonProperty("paymentRequestNumber")]

@@ -68,8 +68,8 @@ public class CreatePaymentTests
                                 Description = "Description",
                                 InvoiceCorrectionReference = "ERQ567",
                                 OriginalInvoiceNumber = "23ER56",
-                                OriginalSettlementDate = "2022",
-                                RecoveryDate = "2023",
+                                OriginalSettlementDate = DateTime.Now,
+                                RecoveryDate = DateTime.Now,
                                 SBI = 4567,
                                 Vendor = "A"
 
