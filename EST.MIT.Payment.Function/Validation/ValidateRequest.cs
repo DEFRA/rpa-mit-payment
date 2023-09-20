@@ -185,7 +185,7 @@ public static class ValidateRequest
     public static bool IsValid(string importRequest)
     {
         var schema = JSchema.Parse(schemaJson);
-        var parseImportRequest = JObject.Parse(importRequest);  
+        var parseImportRequest = JObject.Parse(importRequest);
         return parseImportRequest.IsValid(schema);
     }
 }
