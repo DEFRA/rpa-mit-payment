@@ -5,7 +5,7 @@ namespace EST.MIT.Payment.Models;
 public class PaymentRequestsBatch
 {
     [JsonProperty("id")]
-    public string Id { get; init; } = default!; 
+    public string Id { get; init; } = default!;
     [JsonProperty("accountType")]
     public string AccountType { get; init; } = default!;
     [JsonProperty("organisation")]
@@ -13,7 +13,7 @@ public class PaymentRequestsBatch
     [JsonProperty("schemeType")]
     public string SchemeType { get; init; } = default!;
     [JsonProperty("paymentType")]
-    public string PaymentType { get; init; } = default!;    
+    public string PaymentType { get; init; } = default!;
     [JsonProperty("paymentRequests")]
     public List<PaymentRequest> PaymentRequests { get; init; } = default!;
     [JsonProperty("status")]
@@ -21,7 +21,7 @@ public class PaymentRequestsBatch
     [JsonProperty("reference")]
     public string Reference { get; set; } = default!;
     [JsonProperty("created")]
-    public DateTime Created { get; init; } = DateTime.UtcNow;
+    public DateTime Created { get; init; }
     [JsonProperty("updated")]
     public DateTime? Updated { get; init; }
     [JsonProperty("createdBy")]

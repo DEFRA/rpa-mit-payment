@@ -36,9 +36,10 @@ public class CreatePaymentTests
                      {
                         Id = "1",
                         AccountType = "AD",
-                        Created = DateTime.Now,
+                        Created = new DateTime(2022,11,05),
                         CreatedBy = "henry",
                         Organisation = "FGH",
+                        PaymentType = "AP",
                         PaymentRequests = new List<PaymentRequest>()
                         {
                             new PaymentRequest()
