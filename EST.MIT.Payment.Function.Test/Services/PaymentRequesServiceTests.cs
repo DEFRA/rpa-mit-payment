@@ -3,13 +3,13 @@ using EST.MIT.Payment.Services;
 
 namespace EST.MIT.Payment.Function.Test.Services;
 
-public class PaymentRequesServiceTests
+public class PaymentRequestServiceTests
 {
-    private readonly PaymentRequesService _paymentRequesService;
+    private readonly PaymentRequestService _paymentRequestService;
 
-    public PaymentRequesServiceTests()
+    public PaymentRequestServiceTests()
     {
-        _paymentRequesService = new PaymentRequesService();
+        _paymentRequestService = new PaymentRequestService();
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.True(result);
     }
@@ -59,7 +59,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -85,7 +85,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -111,7 +111,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -137,7 +137,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -163,7 +163,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -189,7 +189,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -215,7 +215,7 @@ public class PaymentRequesServiceTests
             } }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -234,7 +234,7 @@ public class PaymentRequesServiceTests
             PaymentDetails = new List<StrategicPaymentDetail>()
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
         Assert.False(result);
     }
 
@@ -253,7 +253,7 @@ public class PaymentRequesServiceTests
             PaymentDetails = null
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
         Assert.False(result);
     }
 
@@ -281,7 +281,7 @@ public class PaymentRequesServiceTests
             }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -310,7 +310,7 @@ public class PaymentRequesServiceTests
             }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -339,7 +339,7 @@ public class PaymentRequesServiceTests
             }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -368,7 +368,7 @@ public class PaymentRequesServiceTests
             }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -391,7 +391,7 @@ public class PaymentRequesServiceTests
             }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -422,7 +422,7 @@ public class PaymentRequesServiceTests
             }
         };
 
-        var result = _paymentRequesService.ValidatePaymentRequest(paymentRequest);
+        var result = _paymentRequestService.ValidatePaymentRequest(paymentRequest);
 
         Assert.False(result);
     }
@@ -431,7 +431,7 @@ public class PaymentRequesServiceTests
     [Fact]
     public void ValidatePaymentRequest_NullRequest_ReturnsFalse()
     {
-        var result = _paymentRequesService.ValidatePaymentRequest(null);
+        var result = _paymentRequestService.ValidatePaymentRequest(null);
         Assert.False(result);
     }
 

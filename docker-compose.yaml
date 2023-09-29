@@ -1,9 +1,23 @@
 services:
+  azurite:
+      image: mcr.microsoft.com/azure-storage/azurite
+      container_name: aft-backend-azurite
+      hostname: azurite
+      restart: always
+      command: 'azurite --loose --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001 --tableHost 0.0.0.0 --tablePort 10002'
+      ports:
+        - 10000:10000
+        - 10001:10001
+        - 10002:10002
   est-mit-payment:
     build:
       context: .
     image: est-mit-payment
     container_name: est-mit-payment
+    environment:
+      APPINSIGHTS_CLOUDROLE: est-mit-payment-local
+      FUNCTIONS_WORKER_RUNTIME: dotnet-isolated
+      AzureWebJobsStorage: UseDevelopmentStorage=true
 
 # version: '3.8'
 

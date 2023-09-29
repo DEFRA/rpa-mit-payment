@@ -26,7 +26,7 @@ public class PaymentAuditProviderTests
     }
 
     [Fact]
-    public async void GetPaymentInstructionByInvoiceNumber_CallsRepositoryWithCorrectInvoiceNumber()
+    public async Task GetPaymentInstructionByInvoiceNumber_CallsRepositoryWithCorrectInvoiceNumber()
     {
         var strategicPaymentInstructionInvoiceNumber = "INVOICE123";
 
@@ -43,7 +43,7 @@ public class PaymentAuditProviderTests
     }
 
     [Fact]
-    public async void ArchivePaymentInstructionAsync_CallsRepositoryWithCorrectInvoiceNumber()
+    public async Task ArchivePaymentInstructionAsync_CallsRepositoryWithCorrectInvoiceNumber()
     {
         var strategicPaymentInstructionInvoiceNumber = "INVOICE123";
 

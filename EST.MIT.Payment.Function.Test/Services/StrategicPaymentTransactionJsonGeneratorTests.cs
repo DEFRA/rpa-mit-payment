@@ -265,7 +265,7 @@ public class StrategicPaymentTransactionJsonGeneratorTests
     }
 
     [Fact]
-    public async void Test_Send_function()
+    public async Task Test_Send_function()
     {
         var paymentTransaction = new StrategicPaymentTransaction
         {
@@ -314,7 +314,7 @@ public class StrategicPaymentTransactionJsonGeneratorTests
     }
 
     [Fact]
-    public async void Test_SendError()
+    public async Task Test_SendError()
     {
         var paymentTransaction = new StrategicPaymentTransaction
         {

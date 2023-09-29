@@ -3,9 +3,9 @@ using EST.MIT.Payment.Models;
 
 namespace EST.MIT.Payment.Services;
 
-public class PaymentRequesService : IPaymentRequesService
+public class PaymentRequestService : IPaymentRequestService
 {
-    public bool ValidatePaymentRequest(StrategicPaymentInstruction paymentRequest)
+    public bool ValidatePaymentRequest(StrategicPaymentInstruction? paymentRequest)
     {
         // Ensure paymentRequest is not null
         if (paymentRequest == null)

@@ -92,7 +92,7 @@ public class PaymentAuditRepositoryTests
         var mockBlobServiceClient = new Mock<BlobServiceClient>(); // MockBehavior.Strict, new Uri("http://test.com"), (BlobClientOptions)null);
         var mockResponse = Response.FromValue(true, Mock.Of<Response>());
 
-        mockBlobClient.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(true, null));
+        mockBlobClient.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(true, Mock.Of<Response>()));
         mockBlobServiceClient.Setup(b => b.GetBlobContainerClient(It.IsAny<string>())).Returns(mockContainerClient.Object);
         mockContainerClient.Setup(b => b.GetBlobClient(It.IsAny<string>())).Returns(mockBlobClient.Object);
 
@@ -116,7 +116,7 @@ public class PaymentAuditRepositoryTests
 
         blobMock.Setup(b => b.GetBlobContainerClient(It.IsAny<string>())).Returns(blobContainerMock.Object);
         blobContainerMock.Setup(b => b.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
-        blobClientMock.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(false, null));
+        blobClientMock.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(false, Mock.Of<Response>()));
 
         var repository = new PaymentAuditRepository(loggerMock.Object, blobMock.Object);
 
@@ -140,7 +140,7 @@ public class PaymentAuditRepositoryTests
 
         var repository = new PaymentAuditRepository(loggerMock.Object, blobMock.Object);
 
-        string result = null;
+        string result = string.Empty;
         Exception ex = await Record.ExceptionAsync(async () => result = await repository.GetPaymentInstructionByInvoiceNumberAsync("Test Invoice"));
 
         Assert.Equal(string.Empty, result);
@@ -169,7 +169,7 @@ public class PaymentAuditRepositoryTests
 
         var repository = new PaymentAuditRepository(loggerMock.Object, blobMock.Object);
 
-        string result = null;
+        string result = string.Empty;
         Exception ex = await Record.ExceptionAsync(async () => result = await repository.GetPaymentInstructionByInvoiceNumberAsync("Test Invoice"));
 
         Assert.Equal(string.Empty, result);
@@ -192,7 +192,7 @@ public class PaymentAuditRepositoryTests
         var mockBlobServiceClient = new Mock<BlobServiceClient>(); // MockBehavior.Strict, new Uri("http://test.com"), (BlobClientOptions)null);
         var blobCopyOperationMock = new Mock<CopyFromUriOperation>(new Uri("http://localhost"), null);
 
-        mockBlobClient.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(true, null));
+        mockBlobClient.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(true, Mock.Of<Response>()));
         mockBlobServiceClient.Setup(b => b.GetBlobContainerClient(It.IsAny<string>())).Returns(mockContainerClient.Object);
         mockContainerClient.Setup(b => b.GetBlobClient(It.IsAny<string>())).Returns(mockBlobClient.Object);
 
@@ -207,7 +207,6 @@ public class PaymentAuditRepositoryTests
         var repository = new PaymentAuditRepository(loggerMock.Object, mockBlobServiceClient.Object);
         var result = await repository.ArchivePaymentInstructionAsync("Test Invoice");
 
-        Assert.NotNull(result);
         Assert.IsType<Boolean>(result);
     }
 
@@ -221,7 +220,7 @@ public class PaymentAuditRepositoryTests
 
         blobMock.Setup(b => b.GetBlobContainerClient(It.IsAny<string>())).Returns(blobContainerMock.Object);
         blobContainerMock.Setup(b => b.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
-        blobClientMock.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(false, null));
+        blobClientMock.Setup(s => s.ExistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(Response.FromValue<bool>(false, Mock.Of<Response>()));
 
         var repository = new PaymentAuditRepository(loggerMock.Object, blobMock.Object);
 
