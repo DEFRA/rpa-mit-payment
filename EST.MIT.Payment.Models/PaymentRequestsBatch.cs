@@ -2,18 +2,18 @@ using Newtonsoft.Json;
 
 namespace EST.MIT.Payment.Models;
 
-public class Invoice
+public class PaymentRequestsBatch
 {
     [JsonProperty("id")]
     public string Id { get; init; } = default!;
-    [JsonProperty("invoiceType")]
-    public string InvoiceType { get; init; } = default!;
     [JsonProperty("accountType")]
     public string AccountType { get; init; } = default!;
     [JsonProperty("organisation")]
     public string Organisation { get; init; } = default!;
     [JsonProperty("schemeType")]
     public string SchemeType { get; init; } = default!;
+    [JsonProperty("paymentType")]
+    public string PaymentType { get; init; } = default!;
     [JsonProperty("paymentRequests")]
     public List<PaymentRequest> PaymentRequests { get; init; } = default!;
     [JsonProperty("status")]
@@ -21,7 +21,7 @@ public class Invoice
     [JsonProperty("reference")]
     public string Reference { get; set; } = default!;
     [JsonProperty("created")]
-    public DateTime Created { get; init; } = DateTime.UtcNow;
+    public DateTime Created { get; init; }
     [JsonProperty("updated")]
     public DateTime? Updated { get; init; }
     [JsonProperty("createdBy")]

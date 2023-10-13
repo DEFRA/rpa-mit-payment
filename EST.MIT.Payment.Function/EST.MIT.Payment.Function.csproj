@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.3</Version>
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     <UserSecretsId>dda3e3d3-4812-4dba-acb4-204d96591700</UserSecretsId>
     <OutputType>Exe</OutputType>
+    <Version>1.0.4</Version>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Exclude the project from analysis -->
