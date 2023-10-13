@@ -10,7 +10,7 @@ public class ValidateRequestTests
         var validJson = @"
             {
                 ""schemeType"": ""TestScheme"",
-                ""invoices"": [
+                ""paymentRequestsBatches"": [
                     {
                         ""id"": ""1"",
                         ""invoiceType"": ""TestType"",
