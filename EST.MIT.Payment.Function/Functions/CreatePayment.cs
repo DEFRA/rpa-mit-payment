@@ -15,13 +15,15 @@ namespace EST.MIT.Payment.Function.Functions
 	{
         private readonly IEventQueueService _eventQueueService;
         private readonly IServiceBus _serviceBus;
+        private readonly IPaymentAuditProvider _paymentAuditProvider;
         private readonly ISchemeValidator _schemeValidator;
 
-        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, ISchemeValidator schemeValidator)
+        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, IPaymentAuditProvider paymentAuditProvider,  ISchemeValidator schemeValidator)
         {
             _eventQueueService = eventQueueService;
             _schemeValidator = schemeValidator;
             _serviceBus = serviceBus;
+            _paymentAuditProvider = paymentAuditProvider;
         }
 
         [Function("CreatePayment")]
@@ -29,7 +31,7 @@ namespace EST.MIT.Payment.Function.Functions
             [QueueTrigger("payment", Connection = "QueueConnectionString")] string paymentRequestMsg,
             ILogger log)
         {
-            log.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
+            log.LogInformation($"Queue trigger function processed: {paymentRequestMsg}");
 
             InvoiceScheme invoiceScheme;
 
@@ -72,13 +74,6 @@ namespace EST.MIT.Payment.Function.Functions
 
             if (schemeExists)
             {
-                //await context.CallActivityAsync("ExecuteStrategicPayments", invoiceScheme);
-                log.LogInformation("Executing Strategic Payments...");
-                // Add logic for Strategic Payments
-
-                await Task.Delay(1); //TODO: remove when async code is added to the function
-
-                //await context.CallActivityAsync("ExecuteServiceBusForSPS", invoiceScheme);
                 log.LogInformation("Executing Service Bus For Strategic Payments...");
 
                 string message = JsonConvert.SerializeObject(invoiceScheme);
@@ -87,13 +82,14 @@ namespace EST.MIT.Payment.Function.Functions
             }
             else
             {
-                //await context.CallActivityAsync("ExecuteTransformationLayer", invoiceScheme);
                 log.LogInformation("Executing Transformation Layer...");
-                // Add logic for Transformation Layer
+                // Transformation Layer - save XML file to Blob storage
 
-                await Task.Delay(1); //TODO: remove when async code is added to the function
 
             }
+
+            // Audit the operation
+            _paymentAuditProvider.CreatePaymentInstruction(paymentRequestMsg);
         }
     }
 }
