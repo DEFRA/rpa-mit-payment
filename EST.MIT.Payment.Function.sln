@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Function", "EST.MIT.Payment.Function\EST.MIT.Payment.Function.csproj", "{2CA96C4C-A24F-492A-9573-590415A20C99}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Function.Tests", "EST.MIT.Payment.Function.Test\EST.MIT.Payment.Function.Tests.csproj", "{2D756AFE-5497-4339-90D9-50DA93BFA8C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Function.Tests", "EST.MIT.Payment.Function.Tests\EST.MIT.Payment.Function.Tests.csproj", "{2D756AFE-5497-4339-90D9-50DA93BFA8C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Interfaces", "EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj", "{096BDF32-8632-4DD9-976C-975B03412821}"
 EndProject

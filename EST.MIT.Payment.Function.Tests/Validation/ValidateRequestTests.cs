@@ -1,6 +1,6 @@
 using EST.MIT.Payment.Function.Validation;
 
-namespace EST.MIT.Payment.Function.Test.Validation;
+namespace EST.MIT.Payment.Function.Tests.Validation;
 
 public class ValidateRequestTests
 {

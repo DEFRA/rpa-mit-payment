@@ -6,7 +6,7 @@ using Moq;
 using Microsoft.Extensions.Configuration;
 using Azure.Messaging.ServiceBus;
 
-namespace EST.MIT.Payment.Function.Test.Services;
+namespace EST.MIT.Payment.Function.Tests.Services;
 
 public class StrategicPaymentTransactionJsonGeneratorTests
 {

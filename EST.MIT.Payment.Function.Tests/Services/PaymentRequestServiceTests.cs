@@ -1,7 +1,7 @@
 using EST.MIT.Payment.Models;
 using EST.MIT.Payment.Services;
 
-namespace EST.MIT.Payment.Function.Test.Services;
+namespace EST.MIT.Payment.Function.Tests.Services;
 
 public class PaymentRequestServiceTests
 {

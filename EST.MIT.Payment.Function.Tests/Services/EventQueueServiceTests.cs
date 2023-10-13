@@ -4,7 +4,7 @@ using Azure.Storage.Queues.Models;
 using EST.MIT.Payment.Services;
 using Moq;
 
-namespace EST.MIT.Payment.Function.Test.Services
+namespace EST.MIT.Payment.Function.Tests.Services
 {
     public class EventQueueServiceTests
     {

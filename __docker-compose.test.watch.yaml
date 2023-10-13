@@ -5,4 +5,4 @@ services:
     build:
       target: development
     container_name: est-mit-payment
-    entrypoint: dotnet watch --project ./EST.MIT.Payment.Function.Test test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'
+    entrypoint: dotnet watch --project ./EST.MIT.Payment.Function.Tests test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'

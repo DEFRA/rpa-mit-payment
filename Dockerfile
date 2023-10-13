@@ -1,16 +1,16 @@
 # development
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS development
 
-RUN mkdir -p /home/dotnet/EST.MIT.Payment.Function.Test/ /home/dotnet/EST.MIT.Payment.Function/
+RUN mkdir -p /home/dotnet/EST.MIT.Payment.Function.Tests/ /home/dotnet/EST.MIT.Payment.Function/
 
-COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function.Test/*.csproj ./EST.MIT.Payment.Function.Test/
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function.Tests/*.csproj ./EST.MIT.Payment.Function.Tests/
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.DataAccess/*.csproj ./EST.MIT.Payment.DataAccess/
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function/*.csproj ./EST.MIT.Payment.Function/
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Interfaces/*.csproj ./EST.MIT.Payment.Interfaces/
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Models/*.csproj ./EST.MIT.Payment.Models/
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Services/*.csproj ./EST.MIT.Payment.Services/
 
-RUN dotnet restore ./EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj
+RUN dotnet restore ./EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj
 RUN dotnet restore ./EST.MIT.Payment.Function/EST.MIT.Payment.Function.csproj
 
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function /src/EST.MIT.Payment.Function

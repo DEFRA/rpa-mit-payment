@@ -10,9 +10,9 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/EST.MIT.Payment.Function.Test/bin/Debug/net6.0/EST.MIT.Payment.Function.Test.dll",
+      "program": "${workspaceFolder}/EST.MIT.Payment.Function.Tests/bin/Debug/net6.0/EST.MIT.Payment.Function.Tests.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/EST.MIT.Payment.Function.Test",
+      "cwd": "${workspaceFolder}/EST.MIT.Payment.Function.Tests",
       // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
       "console": "internalConsole",
       "stopAtEntry": false

@@ -5,7 +5,7 @@ using EST.MIT.Payment.Function.Functions;
 using EST.MIT.Payment.Models;
 using EST.MIT.Payment.Interfaces;
 
-namespace EST.MIT.Payment.Function.Test;
+namespace EST.MIT.Payment.Function.Tests;
 public class CreatePaymentTests
 {
     private readonly CreatePayment _createPayment;

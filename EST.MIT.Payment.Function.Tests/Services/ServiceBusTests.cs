@@ -4,7 +4,7 @@ using EST.MIT.Payment.Services;
 using Moq;
 using Newtonsoft.Json;
 
-namespace EST.MIT.Payment.Function.Test.Services
+namespace EST.MIT.Payment.Function.Tests.Services
 {
     public class ServiceBusTests
     {
