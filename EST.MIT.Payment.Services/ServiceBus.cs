@@ -8,30 +8,26 @@ namespace EST.MIT.Payment.Services
     {
         private ServiceBusSender _sender = default!;
 
-        private ServiceBusMessage _message;
-
         private readonly string _queueName;
 
         private readonly ServiceBusClient _client;
 
-        public ServiceBus(string queueName, ServiceBusClient client, ServiceBusMessage message)
+        public ServiceBus(string queueName, ServiceBusClient client)
         {
             _queueName = queueName;
 
             _client = client;
-
-            _message = message;
         }
 
-        public async Task SendServiceBus(string serviceBus)
+        public async Task SendServiceBus(string message)
         {
             try
             {
                 _sender = _client.CreateSender(_queueName);
 
-                _message = new(Encoding.UTF8.GetBytes(serviceBus));
+                var sbMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(message));
 
-                await _sender.SendMessageAsync(_message);
+                await _sender.SendMessageAsync(sbMessage);
             }
 
             catch (ServiceBusException ex) when

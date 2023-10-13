@@ -11,14 +11,12 @@ namespace EST.MIT.Payment.Function.Test.Services
         private readonly ServiceBus _serviceBus;
         private readonly Mock<ServiceBusClient> _mockServiceBusClient;
         private readonly Mock<ServiceBusSender> _mockServiceBusSender;
-        private readonly Mock<ServiceBusMessage> _mockServiceBusMessage;
 
         public ServiceBusTests()
         {
             _mockServiceBusClient = new Mock<ServiceBusClient>();
             _mockServiceBusSender = new Mock<ServiceBusSender>();
-            _mockServiceBusMessage = new Mock<ServiceBusMessage>();
-            _serviceBus = new ServiceBus("queueName", _mockServiceBusClient.Object, _mockServiceBusMessage.Object);
+            _serviceBus = new ServiceBus("queueName", _mockServiceBusClient.Object);
         }
 
         [Fact]

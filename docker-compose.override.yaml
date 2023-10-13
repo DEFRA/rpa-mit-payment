@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   est-mit-payment:
-    build:
-      target: development
+    image: est-mit-payment-development
+    container_name: est-mit-payment-developer
     ports:
-      - "3000:3000"
+      - "3001:80"
     volumes:
       - ./EST.MIT.Payment.Function:/home/dotnet/EST.MIT.Payment.Function
       - ./EST.MIT.Payment.Function.Tests:/home/dotnet/EST.MIT.Payment.Function.Tests

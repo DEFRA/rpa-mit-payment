@@ -3,12 +3,11 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "QueueConnectionString": "__QUEUECONNECTIONSTRING__",
-    "EventQueueName":  "event",
-    "TableConnectionString": "__TABLECONNECTIONSTRING__",
-    "BlobConnectionString": "__BLOBCONNECTIONSTRING__",
-    "PaymentBlobContainer": "__PAYMENTBLOBCONTAINER__",
-    "QueueName":  "myQueue",
+    "QueueConnectionString": "__QUEUECONNECTIONSTRING-FOR-EVENTS-AND-PAYMENTS__",
+    "EventQueueName": "rpa-mit-events",
+    "PaymentQueueName": "rpa-mit-payment",
+    "ServiceBusConnectionString": "__SERVICEBUSCONNECTIONSTRING__",
+    "ServiceBusQueueName": "rpa-mit-payment",
     "Schemes": "__SCHEMES__"
   }
 }

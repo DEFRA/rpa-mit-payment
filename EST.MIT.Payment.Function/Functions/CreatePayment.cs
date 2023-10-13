@@ -28,10 +28,10 @@ namespace EST.MIT.Payment.Function.Functions
 
         [Function("CreatePayment")]
         public async Task Run(
-            [QueueTrigger("payment", Connection = "QueueConnectionString")] string paymentRequestMsg,
+            [QueueTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] string paymentRequestMsg,
             ILogger log)
         {
-            log.LogInformation($"Queue trigger function processed: {paymentRequestMsg}");
+            log.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
 
             InvoiceScheme invoiceScheme;
 
@@ -72,21 +72,14 @@ namespace EST.MIT.Payment.Function.Functions
             var schemeType = invoiceScheme.SchemeType;
             var schemeExists = _schemeValidator.ValueExists(schemeType);
 
-            if (schemeExists)
-            {
+            //if (schemeExists)
+            //{
                 log.LogInformation("Executing Service Bus For Strategic Payments...");
 
                 string message = JsonConvert.SerializeObject(invoiceScheme);
 
                 await _serviceBus.SendServiceBus(message);
-            }
-            else
-            {
-                log.LogInformation("Executing Transformation Layer...");
-                // Transformation Layer - save XML file to Blob storage
-
-
-            }
+            //}
 
             // Audit the operation
             _paymentAuditProvider.CreatePaymentInstruction(paymentRequestMsg);

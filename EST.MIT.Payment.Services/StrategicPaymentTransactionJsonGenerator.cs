@@ -36,22 +36,4 @@ public class StrategicPaymentTransactionJsonGenerator : IStrategicPaymentTransac
 
         return JsonConvert.SerializeObject(strategicPaymentTransaction, jsonSettings);
     }
-
-    public async Task Send(StrategicPaymentTransaction strategicPayment)
-    {
- 
-        var payment = Generate(strategicPayment);
-
-        var transaction = new ServiceBus(_configuration["QueueName"], _serviceBusClient, _serviceBusMessage);
-
-        await transaction.SendServiceBus(payment);
-    }
-
-    public async Task SendError(StrategicPaymentTransaction strategicPayment)
-    {
-        var payment = Generate(strategicPayment);
-
-        var errorMessage = new ServiceBus(_configuration["QueueNameError"], _serviceBusClient, _serviceBusMessage);
-        await errorMessage.SendServiceBus(payment);
-    }
 }

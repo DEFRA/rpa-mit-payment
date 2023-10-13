@@ -35,7 +35,14 @@ container:
   limitCpu: 120m
   port: 3000
   comPlusEnableDiagnostics: 0
-
+  serviceBusConnectionString__fullyQualifiedNamespace: SNDFFCINFSB1001.servicebus.windows.net
+  serviceBusConnectionString__credential: managedidentity
+  serviceBusQueueName: rpa-mit-payment
+  queueConnectionString__queueServiceUri: https://sndffcrpamitst1001.queue.core.windows.net/
+  queueConnectionString__credential: managedidentity
+  eventQueueName: rpa-mit-events
+  paymentQueueName: rpa-mit-payment
+  
 volumeMounts:
   mountPath: /var/www/
   name: core-app-dir

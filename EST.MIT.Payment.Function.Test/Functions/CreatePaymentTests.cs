@@ -13,21 +13,21 @@ public class CreatePaymentTests
     private readonly Mock<IServiceBus> _mockServiceBus;
     private readonly Mock<ISchemeValidator> _mockSchemeValidator;
     private readonly Mock<IEventQueueService> _mockEventQueueService;
+    private readonly Mock<IPaymentAuditProvider> _mockPaymentAuditProvider;
 
     public CreatePaymentTests()
     {
         _mockEventQueueService = new Mock<IEventQueueService>();
         _mockServiceBus = new Mock<IServiceBus>();
         _mockSchemeValidator = new Mock<ISchemeValidator>();
-        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockSchemeValidator.Object);
+        _mockPaymentAuditProvider = new Mock<IPaymentAuditProvider>();
+        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockPaymentAuditProvider.Object, _mockSchemeValidator.Object);
         _mockLogger = new Mock<ILogger>();
     }
 
     [Fact]
     public void Given_Function_Receives_Valid_PaymentRequest_Message()
     {
-        // TODO - check test is valid for reworked code
-
         var paymentRequest = new InvoiceScheme()
         {
             PaymentRequestsBatches = new List<PaymentRequestsBatch>()
@@ -87,7 +87,6 @@ public class CreatePaymentTests
         };
 
         string message = JsonConvert.SerializeObject(paymentRequest);
-        const string instanceId = "7E467BDB-213F-407A-B86A-1954053D3C24";
 
         var result = _createPayment?.Run(message, _mockLogger.Object);
 
@@ -103,7 +102,7 @@ public class CreatePaymentTests
             x => x.Log(
                 It.IsAny<LogLevel>(),
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Started orchestration with ID = '{instanceId}'."),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Executing Service Bus For Strategic Payments..."),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
@@ -169,7 +168,13 @@ public class CreatePaymentTests
             It.IsAny<Exception>(),
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-        // TODO - check result
+        _mockLogger.Verify(
+            x => x.Log(
+            It.IsAny<LogLevel>(),
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Payment request is not valid"),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
     }
 
     [Fact]
