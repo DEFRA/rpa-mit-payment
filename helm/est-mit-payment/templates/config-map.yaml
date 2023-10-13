@@ -7,7 +7,7 @@ data:
   QueueConnectionString__credential: {{ quote .Values.container.queueConnectionString__credential }}
   ServiceBusConnectionString__fullyQualifiedNamespace: {{ quote .Values.container.serviceBusConnectionString__fullyQualifiedNamespace }}
   ServiceBusConnectionString__credential: {{ quote .Values.container.serviceBusConnectionString__credential }}
-  ServiceBusQueueName: {{ .Values.container.serviceBusQueueName }}
-  EventQueueName: {{ .Values.container.eventQueueName }}
-  PaymentQueueName: {{ .Values.container.paymentQueueName }}
+  ServiceBusQueueName: {{ quote .Values.container.serviceBusQueueName }}
+  EventQueueName: {{ quote .Values.container.eventQueueName }}
+  PaymentQueueName: {{ quote .Values.container.paymentQueueName }}
 {{- end -}}
