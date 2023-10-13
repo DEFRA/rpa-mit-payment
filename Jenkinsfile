@@ -1,4 +1,4 @@
-@Library('defra-library@add-dotnet-function-deploy') _
+@Library('defra-library@v-9') _
 
-buildDotNetFunction project: 'EST.MIT.Payment.Function'
+buildDotNetCore project: 'EST.MIT.Payment.Function'
 
