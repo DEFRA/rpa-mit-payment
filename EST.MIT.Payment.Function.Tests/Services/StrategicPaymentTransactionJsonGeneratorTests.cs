@@ -2,30 +2,16 @@ using EST.MIT.Payment.Services;
 using EST.MIT.Payment.Interfaces;
 using EST.MIT.Payment.Models;
 using System.Globalization;
-using Moq;
-using Microsoft.Extensions.Configuration;
-using Azure.Messaging.ServiceBus;
 
 namespace EST.MIT.Payment.Function.Tests.Services;
 
 public class StrategicPaymentTransactionJsonGeneratorTests
 {
     private readonly IStrategicPaymentTransactionJsonGenerator _generator;
-    private readonly Mock<IConfiguration> _mockConfiguration;
-    private readonly Mock<ServiceBusClient> _mockServiceBusClient;
-    private readonly Mock<ServiceBusSender> _mockServiceBusSender;
-    private readonly ServiceBusMessage _serviceBusMessage;
 
     public StrategicPaymentTransactionJsonGeneratorTests()
     {
-        _mockConfiguration = new Mock<IConfiguration>();
-        _mockServiceBusClient = new Mock<ServiceBusClient>();
-        _mockServiceBusSender = new Mock<ServiceBusSender>();
-        _serviceBusMessage = new ServiceBusMessage();
-        _mockConfiguration.Setup(x => x["ConnectionString"]).Returns("Endpoint=sb://paymentgenerator.servicebus.windows.net/;SharedAccessKeyName=SenderPolicy;SharedAccessKey=eCcIV666vfuLtjU4dtBk0xqS1oZFF7AlT+ASbJo2sV0=");
-        _mockConfiguration.Setup(x => x["QueueName"]).Returns("paymentgeneratorqueue");
-        _mockConfiguration.Setup(x => x["QueueNameError"]).Returns("paymentgeneratorerror");
-        _generator = new StrategicPaymentTransactionJsonGenerator(_mockConfiguration.Object, _mockServiceBusClient.Object, _serviceBusMessage);
+        _generator = new StrategicPaymentTransactionJsonGenerator();
     }
 
     [Fact]

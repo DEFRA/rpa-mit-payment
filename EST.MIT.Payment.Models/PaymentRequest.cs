@@ -31,14 +31,10 @@ public class PaymentRequest
     public int PaymentRequestNumber { get; init; }
     [JsonProperty("agreementNumber")]
     public string AgreementNumber { get; init; } = default!;
-    //[JsonProperty("contractNumber")]
-    //public string ContractNumber { get; init; } = default!;
     [JsonProperty("value")]
     public decimal Value { get; init; }
     [JsonProperty("dueDate")]
     public string DueDate { get; init; } = default!;
     [JsonProperty("invoiceLines")]
     public List<InvoiceLine> InvoiceLines { get; init; } = default!;
-    //[JsonProperty("appendixReferences")]
-    //public AppendixReferences AppendixReferences { get; init; } = default!;
 }

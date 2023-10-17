@@ -4,6 +4,6 @@ namespace EST.MIT.Payment.Interfaces
 {
     public interface IServiceBus
     {
-        Task SendServiceBus(string serviceBus);
+        Task SendServiceBus(string message);
     }
 }

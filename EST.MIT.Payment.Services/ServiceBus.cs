@@ -33,19 +33,16 @@ namespace EST.MIT.Payment.Services
             catch (ServiceBusException ex) when
             (ex.Reason == ServiceBusFailureReason.MessagingEntityNotFound)
             {
-                return;
             }
 
             catch (ServiceBusException ex) when
             (ex.Reason == ServiceBusFailureReason.ServiceTimeout)
             {
-                return;
             }
 
             catch (ServiceBusException ex) when
             (ex.Reason == ServiceBusFailureReason.MessageSizeExceeded)
             {
-                return;
             }
         }
     }
