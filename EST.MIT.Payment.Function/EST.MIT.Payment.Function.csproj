@@ -36,6 +36,5 @@
     <ProjectReference Include="..\EST.MIT.Payment.Services\EST.MIT.Payment.Services.csproj" />
     <ProjectReference Include="..\EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj" />
     <ProjectReference Include="..\EST.MIT.Payment.Models\EST.MIT.Payment.Models.csproj" />
-    <ProjectReference Include="..\EST.MIT.Payment.DataAccess\EST.MIT.Payment.DataAccess.csproj" />
   </ItemGroup>
 </Project>

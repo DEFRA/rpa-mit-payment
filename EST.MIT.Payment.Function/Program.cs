@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using Azure.Identity;
-using Azure.Messaging.ServiceBus;
-using Azure.Storage.Queues;
+using EST.MIT.Payment.Function.Services;
 using EST.MIT.Payment.Interfaces;
 using EST.MIT.Payment.Services;
 using Microsoft.Extensions.Configuration;
@@ -25,45 +23,8 @@ var host = new HostBuilder()
         services.AddHttpClient();
         services.AddScoped<ISchemeValidator, SchemeValidator>();
 
-        services.AddSingleton<IEventQueueService>(_ =>
-        {
-            var storageAccountCredential = configuration.GetSection("QueueConnectionString:Credential").Value;
-            var queueName = configuration.GetSection("EventQueueName").Value;
-            if (IsManagedIdentity(storageAccountCredential))
-            {
-                var queueServiceUri = configuration.GetSection("QueueConnectionString:QueueServiceUri").Value;
-                var queueUrl = new Uri($"{queueServiceUri}{queueName}");
-                return new EventQueueService(new QueueClient(queueUrl, new DefaultAzureCredential()));
-            }
-            else
-            {
-                return new EventQueueService(new QueueClient(configuration.GetSection("QueueConnectionString").Value, queueName));
-            }
-        });
-
-        services.AddSingleton<IServiceBus>(_ =>
-        {
-            var storageAccountCredential = configuration.GetSection("ServiceBusConnectionString:Credential").Value;
-            var serviceBusQueueName = configuration.GetSection("ServiceBusQueueName").Value;
-            if (IsManagedIdentity(storageAccountCredential))
-            {
-                var serviceBusNamespace = configuration.GetSection("ServiceBusConnectionString:FullyQualifiedNamespace").Value;
-                var serviceBusClient = new ServiceBusClient(serviceBusNamespace, new DefaultAzureCredential());
-                return new ServiceBus(serviceBusQueueName, serviceBusClient);
-            }
-            else
-            {
-                var serviceBusConnString = configuration.GetSection("ServiceBusConnectionString").Value;
-                var serviceBusClient = new ServiceBusClient(serviceBusConnString);
-                return new ServiceBus(serviceBusQueueName, serviceBusClient);
-            }
-        });
+        services.AddQueueAndServiceBusServices(configuration);
     })
     .Build();
 
 host.Run();
-
-static bool IsManagedIdentity(string credentialName)
-{
-    return credentialName != null && credentialName.ToLower() == "managedidentity";
-}

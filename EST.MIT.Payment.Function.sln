@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Function.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Interfaces", "EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj", "{096BDF32-8632-4DD9-976C-975B03412821}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.DataAccess", "EST.MIT.Payment.DataAccess\EST.MIT.Payment.DataAccess.csproj", "{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Models", "EST.MIT.Payment.Models\EST.MIT.Payment.Models.csproj", "{0A8EC5B3-00F6-43DD-BBFA-D14D033A48BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EST.MIT.Payment.Services", "EST.MIT.Payment.Services\EST.MIT.Payment.Services.csproj", "{45768B0D-FA4F-4B9A-8236-6743471E2D51}"
@@ -38,10 +36,6 @@ Global
 		{096BDF32-8632-4DD9-976C-975B03412821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{096BDF32-8632-4DD9-976C-975B03412821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{096BDF32-8632-4DD9-976C-975B03412821}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A969DAC3-CDB9-4F4C-BFB7-C921D58D5A2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A8EC5B3-00F6-43DD-BBFA-D14D033A48BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A8EC5B3-00F6-43DD-BBFA-D14D033A48BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A8EC5B3-00F6-43DD-BBFA-D14D033A48BD}.Release|Any CPU.ActiveCfg = Release|Any CPU

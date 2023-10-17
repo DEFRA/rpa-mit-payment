@@ -36,13 +36,13 @@ container:
   port: 3000
   azureWebJobsStorage: secret
   comPlusEnableDiagnostics: 0
-  serviceBusConnectionString__fullyQualifiedNamespace: SNDFFCINFSB1001.servicebus.windows.net
-  serviceBusConnectionString__credential: managedidentity
-  serviceBusQueueName: rpa-mit-payment
-  queueConnectionString__queueServiceUri: https://sndffcrpamitst1001.queue.core.windows.net/
-  queueConnectionString__credential: managedidentity
-  eventQueueName: rpa-mit-events
-  paymentQueueName: rpa-mit-payment
+  serviceBusConnectionString__fullyQualifiedNamespace: value-from-app-config-service
+  serviceBusConnectionString__credential: value-from-app-config-service
+  serviceBusQueueName: value-from-app-config-service
+  queueConnectionString__credential: value-from-app-config-service
+  queueConnectionString__queueServiceUri: value-from-app-config-service
+  eventQueueName: value-from-app-config-service
+  paymentQueueName: value-from-app-config-service
   
 volumeMounts:
   mountPath: /var/www/
