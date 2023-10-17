@@ -29,6 +29,7 @@ namespace EST.MIT.Payment.Function.Services
                 {
                     var queueServiceUri = configuration.GetSection("QueueConnectionString:QueueServiceUri").Value;
                     var queueUrl = new Uri($"{queueServiceUri}{queueName}");
+                    Console.WriteLine($"Startup.QueueClient using Managed Identity with url {queueUrl}");
                     return new EventQueueService(new QueueClient(queueUrl, new DefaultAzureCredential()));
                 }
                 else
@@ -44,6 +45,7 @@ namespace EST.MIT.Payment.Function.Services
                 if (IsManagedIdentity(storageAccountCredential))
                 {
                     var serviceBusNamespace = configuration.GetSection("ServiceBusConnectionString:FullyQualifiedNamespace").Value;
+                    Console.WriteLine($"Startup.ServiceBusClient using Managed Identity with namespace {serviceBusNamespace}");
                     var serviceBusClient = new ServiceBusClient(serviceBusNamespace, new DefaultAzureCredential());
                     return new ServiceBus(serviceBusQueueName, serviceBusClient);
                 }

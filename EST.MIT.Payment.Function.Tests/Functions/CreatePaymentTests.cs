@@ -13,15 +13,13 @@ public class CreatePaymentTests
     private readonly Mock<IServiceBus> _mockServiceBus;
     private readonly Mock<ISchemeValidator> _mockSchemeValidator;
     private readonly Mock<IEventQueueService> _mockEventQueueService;
-    private readonly Mock<IPaymentAuditProvider> _mockPaymentAuditProvider;
 
     public CreatePaymentTests()
     {
         _mockEventQueueService = new Mock<IEventQueueService>();
         _mockServiceBus = new Mock<IServiceBus>();
         _mockSchemeValidator = new Mock<ISchemeValidator>();
-        _mockPaymentAuditProvider = new Mock<IPaymentAuditProvider>();
-        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockPaymentAuditProvider.Object, _mockSchemeValidator.Object);
+        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockSchemeValidator.Object);
         _mockLogger = new Mock<ILogger>();
     }
 
@@ -102,7 +100,7 @@ public class CreatePaymentTests
             x => x.Log(
                 It.IsAny<LogLevel>(),
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Executing Service Bus For Strategic Payments..."),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Executing Service Bus For Strategic Payments...schemeExists=False"),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 

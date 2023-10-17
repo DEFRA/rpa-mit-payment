@@ -7,7 +7,6 @@ using EST.MIT.Payment.Models;
 using Microsoft.Azure.Functions.Worker;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
-using EST.MIT.Payment.Services;
 
 namespace EST.MIT.Payment.Function.Functions
 {
@@ -15,15 +14,13 @@ namespace EST.MIT.Payment.Function.Functions
 	{
         private readonly IEventQueueService _eventQueueService;
         private readonly IServiceBus _serviceBus;
-        private readonly IPaymentAuditProvider _paymentAuditProvider;
         private readonly ISchemeValidator _schemeValidator;
 
-        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, IPaymentAuditProvider paymentAuditProvider,  ISchemeValidator schemeValidator)
+        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, ISchemeValidator schemeValidator)
         {
             _eventQueueService = eventQueueService;
             _schemeValidator = schemeValidator;
             _serviceBus = serviceBus;
-            _paymentAuditProvider = paymentAuditProvider;
         }
 
         [Function("CreatePayment")]
@@ -67,23 +64,26 @@ namespace EST.MIT.Payment.Function.Functions
 
             log.LogInformation($"Payment request size: {MessageSize.GetMessageSize(invoiceScheme)}kb");
 
-            await _eventQueueService.CreateMessage("sent", "paymentrequest", "payment request sent", paymentRequestMsg);
+            try
+            {
+                await _eventQueueService.CreateMessage("sending", "paymentrequest", "payment request about to send", paymentRequestMsg);
 
-            var schemeType = invoiceScheme.SchemeType;
-            var schemeExists = _schemeValidator.ValueExists(schemeType);
+                var schemeType = invoiceScheme.SchemeType;
+                var schemeExists = _schemeValidator.ValueExists(schemeType);
 
-            //if (schemeExists)
-            //{
-                log.LogInformation("Executing Service Bus For Strategic Payments...");
+                log.LogInformation($"Executing Service Bus For Strategic Payments...schemeExists={schemeExists}");
 
                 string message = JsonConvert.SerializeObject(invoiceScheme);
 
                 await _serviceBus.SendServiceBus(message);
-            //}
 
-            // Audit the operation
-            _paymentAuditProvider.CreatePaymentInstruction(paymentRequestMsg);
+                await _eventQueueService.CreateMessage("sent", "paymentrequest", "payment request sent", paymentRequestMsg);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Error sending payment request to service bus");
+                await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request failed", paymentRequestMsg);
+            }
         }
     }
 }
-

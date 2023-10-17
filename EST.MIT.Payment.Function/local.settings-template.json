@@ -3,7 +3,7 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "QueueConnectionString": "__QUEUECONNECTIONSTRING-FOR-EVENTS-AND-PAYMENTS__",
+    "QueueConnectionString": "UseDevelopmentStorage=true",
     "EventQueueName": "rpa-mit-events",
     "PaymentQueueName": "rpa-mit-payment",
     "ServiceBusConnectionString": "__SERVICEBUSCONNECTIONSTRING__",

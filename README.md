@@ -1,6 +1,6 @@
 # Introduction 
 This repository contains the code for consuming the payment generator for MIT
-The Invoices created in MIT need to reach one of two destinations, Strategics Payments (SPS) or Transformation Layer (TL). The destination is determined by the scheme type. Depending of scheme type the Payment Generator will create either a Json message to be place on a Service Bus queue for SPS or an XML file to be placed in Blob Storage for the TL.
+The Invoices created in MIT need to proxied to SPS via Service Bus. Any processed messages are audited by the rpa-mit-events service (by sending a message to the rpa-mit-events queue).
  
 # Getting Started
 ## Azurite
@@ -11,12 +11,13 @@ Follow the following guide to setup Azurite:
 
 ## Storage
 
-The function app uses Azure Storage for Table and Queue.
+The function app uses Azure Storage for Queue but you will need to set up an appropriate Service Bus queue in Azure.
 
 The function app requires:
 
-- Queue name: `Payment`
-- Table name: `Payment`
+- Storage Queue name: `rpa-mit-payment`
+- Storage Queue name: `rpa-mit-events`
+- Service Bus Queue name: `rpa-mit-payment`
 
 ## local.settings
 ```
@@ -24,11 +25,12 @@ The function app requires:
     "IsEncrypted": false,
     "Values": {
         "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
         "QueueConnectionString": "UseDevelopmentStorage=true",
-        "TableConnectionString": "UseDevelopmentStorage=true",
-        "BlobConnectionString": "UseDevelopmentStorage=true",
-        "PaymentBlobContainer": "Payment",
+        "EventQueueName": "rpa-mit-events",
+        "PaymentQueueName": "rpa-mit-payment",
+        "ServiceBusConnectionString": "--SECRET--",
+        "ServiceBusQueueName": "rpa-mit-payment",
         "Schemes": "bps,cs"
     }
 }
@@ -87,7 +89,5 @@ The easiest way to build the project is with VS2022. It should download all requ
 Run the tests using the VS2022 Test Explorer.
 
 ## Useful links
-
-- [gov Notify](https://www.notifications.service.gov.uk/using-notify/api-documentation)
 
 - [Use dependency injection in .NET Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection)
