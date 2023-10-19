@@ -9,7 +9,7 @@ namespace EST.MIT.Payment.Function.Tests;
 public class CreatePaymentTests
 {
     private readonly CreatePayment _createPayment;
-    private readonly Mock<ILogger> _mockLogger;
+    private readonly Mock<ILogger<CreatePayment>> _mockLogger;
     private readonly Mock<IServiceBus> _mockServiceBus;
     private readonly Mock<ISchemeValidator> _mockSchemeValidator;
     private readonly Mock<IEventQueueService> _mockEventQueueService;
@@ -19,8 +19,16 @@ public class CreatePaymentTests
         _mockEventQueueService = new Mock<IEventQueueService>();
         _mockServiceBus = new Mock<IServiceBus>();
         _mockSchemeValidator = new Mock<ISchemeValidator>();
-        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockSchemeValidator.Object);
-        _mockLogger = new Mock<ILogger>();
+        _mockLogger = new Mock<ILogger<CreatePayment>>();
+        _mockLogger.Setup(x => x.Log(
+            LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<object>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<object, Exception, string>>()));
+        var mockLoggerFactory = new Mock<ILoggerFactory>();
+        mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _mockLogger.Object);
+        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockSchemeValidator.Object, mockLoggerFactory.Object);
     }
 
     [Fact]
@@ -63,7 +71,7 @@ public class CreatePaymentTests
                                 PaymentRequestNumber = 34567,
                                 SourceSystem = "sourceSystem",
                                 Value = 2,
-                                Currency = "£",
+                                Currency = "GBP",
                                 Description = "Description",
                                 InvoiceCorrectionReference = "ERQ567",
                                 OriginalInvoiceNumber = "23ER56",
@@ -86,7 +94,7 @@ public class CreatePaymentTests
 
         string message = JsonConvert.SerializeObject(paymentRequest);
 
-        var result = _createPayment?.Run(message, _mockLogger.Object);
+        var result = _createPayment?.Run(message);
 
         _mockLogger.Verify(
     x => x.Log(
@@ -156,7 +164,7 @@ public class CreatePaymentTests
 
         string message = JsonConvert.SerializeObject(InvalidPaymentRequest);
 
-        _createPayment?.Run(message, _mockLogger.Object);
+        _createPayment?.Run(message);
 
         _mockLogger.Verify(
             x => x.Log(
@@ -180,7 +188,7 @@ public class CreatePaymentTests
     {
         string? message = null;
 
-        _createPayment?.Run(message, _mockLogger.Object);
+        _createPayment?.Run(message);
 
         _mockLogger.Verify(
             x => x.Log(
@@ -199,7 +207,7 @@ public class CreatePaymentTests
     {
         string message = "{ 'invalid': 'json' }";
 
-        _createPayment?.Run(message, _mockLogger.Object);
+        _createPayment?.Run(message);
 
         _mockLogger.Verify(
             x => x.Log(

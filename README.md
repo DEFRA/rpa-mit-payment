@@ -39,48 +39,55 @@ The function app requires:
 
 ### Message Example
 {
-"invoices": [
-   {
-     "id": "string",
-     "invoiceType": "string",
-     "accountType": "string",
-     "organisation": "string",
-     "schemeType": "string",
-     "paymentRequests": [
-       {
-         "paymentRequestId": "string",
-         "frn": 0,
-         "sourceSystem": "string",
-         "marketingYear": 0,
-         "deliveryBody": "string",
-         "paymentRequestNumber": 0,
-         "agreementNumber": "string",
-         "contractNumber": "string",
-         "value": 0,
-         "dueDate": "string",
-         "invoiceLines": [
-           {
-             "value": 0,
-             "currency": "string",
-             "schemeCode": "string",
-             "description": "string",
-             "fundCode": "string"
-           }
-         ],
-         "appendixReferences": {
-           "claimReferenceNumber": "string"
-         }
-       }
-     ],
-     "status": "string",
-     "reference": "string",
-     "created": "2023-04-03T07:18:19.457Z",
-     "updated": "2023-04-03T07:18:19.457Z",
-     "createdBy": "string",
-     "updatedBy": "string"
-   }
-]
+  "schemeType": "AD",
+  "paymentRequestsBatches": [
+    {
+      "id": "1",
+      "accountType": "AD",
+      "organisation": "FGH",
+      "schemeType": "AD",
+      "paymentType": "AP",
+      "paymentRequests": [
+        {
+          "paymentRequestId": "2",
+          "frn": 56789043,
+          "sbi": 4567,
+          "vendor": "A",
+          "sourceSystem": "sourceSystem",
+          "marketingYear": 2023,
+          "currency": "GBP",
+          "description": "Description",
+          "originalInvoiceNumber": "23ER56",
+          "originalSettlementDate": "2023-10-19T13:11:17.58488+01:00",
+          "recoveryDate": "2023-10-19T13:11:17.584896+01:00",
+          "invoiceCorrectionReference": "ERQ567",
+          "paymentRequestNumber": 34567,
+          "agreementNumber": "12345",
+          "value": 2,
+          "dueDate": "string",
+          "invoiceLines": [
+            {
+              "value": 3,
+              "schemeCode": "D4ERT",
+              "description": "This is a description",
+              "fundCode": "2ADC",
+              "mainAccount": "AccountA",
+              "marketingYear": 2022,
+              "deliveryBody": "DeliveryBody"
+            }
+          ]
+        }
+      ],
+      "status": "A",
+      "reference": "123",
+      "created": "2022-11-05T00:00:00",
+      "updated": "2023-10-19T13:11:17.584978+01:00",
+      "createdBy": "username1",
+      "updatedBy": "username1"
+    }
+  ]
 }
+
 
 # Build and Test
 

@@ -15,26 +15,27 @@ namespace EST.MIT.Payment.Function.Functions
         private readonly IEventQueueService _eventQueueService;
         private readonly IServiceBus _serviceBus;
         private readonly ISchemeValidator _schemeValidator;
+        private readonly ILogger _logger;
 
-        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, ISchemeValidator schemeValidator)
+        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, ISchemeValidator schemeValidator, ILoggerFactory loggerFactory)
         {
             _eventQueueService = eventQueueService;
             _schemeValidator = schemeValidator;
             _serviceBus = serviceBus;
+            _logger = loggerFactory.CreateLogger("CreatePayment");
         }
 
         [Function("CreatePayment")]
         public async Task Run(
-            [QueueTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] string paymentRequestMsg,
-            ILogger log)
+            [QueueTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] string paymentRequestMsg)
         {
-            log.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
+            _logger.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
 
             InvoiceScheme invoiceScheme;
 
             if (paymentRequestMsg == null)
             {
-                log.LogError("Payment request is null");
+                _logger.LogError("Payment request is null");
                 await _eventQueueService.CreateMessage("failed", "paymentrequest", "Payment request is null", paymentRequestMsg);
                 return;
             }
@@ -43,7 +44,12 @@ namespace EST.MIT.Payment.Function.Functions
 
             if (!isValid)
             {
-                log.LogError("Payment request is not valid");
+                _logger.LogError("Payment request is not valid");
+                var errors = ValidateRequest.GetValidationErrors(paymentRequestMsg);
+                foreach (var error in errors)
+                {
+                    _logger.LogError($"JSON validation error: {error}");
+                }
                 return;
             }
 
@@ -58,11 +64,11 @@ namespace EST.MIT.Payment.Function.Functions
             }
             catch (JsonException ex)
             {
-                log.LogError(ex, "Error deserializing payment request");
+                _logger.LogError(ex, "Error deserializing payment request");
                 return;
             }
 
-            log.LogInformation($"Payment request size: {MessageSize.GetMessageSize(invoiceScheme)}kb");
+            _logger.LogInformation($"Payment request size: {MessageSize.GetMessageSize(invoiceScheme)}kb");
 
             try
             {
@@ -71,7 +77,7 @@ namespace EST.MIT.Payment.Function.Functions
                 var schemeType = invoiceScheme.SchemeType;
                 var schemeExists = _schemeValidator.ValueExists(schemeType);
 
-                log.LogInformation($"Executing Service Bus For Strategic Payments...schemeExists={schemeExists}");
+                _logger.LogInformation($"Executing Service Bus For Strategic Payments...schemeExists={schemeExists}");
 
                 string message = JsonConvert.SerializeObject(invoiceScheme);
 
@@ -81,7 +87,7 @@ namespace EST.MIT.Payment.Function.Functions
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "Error sending payment request to service bus");
+                _logger.LogError(ex, "Error sending payment request to service bus");
                 await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request failed", paymentRequestMsg);
             }
         }

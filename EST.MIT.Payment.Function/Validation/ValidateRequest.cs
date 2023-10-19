@@ -188,4 +188,14 @@ public static class ValidateRequest
         var parseImportRequest = JObject.Parse(importRequest);
         return parseImportRequest.IsValid(schema);
     }
+
+    // Only called if initial validation fails
+    public static IList<string> GetValidationErrors(string importRequest)
+    {
+        var schema = JSchema.Parse(schemaJson);
+        var parseImportRequest = JObject.Parse(importRequest);
+        IList<string> errorMessages;
+        var valid = parseImportRequest.IsValid(schema, out errorMessages);
+        return valid ? new List<string>() : errorMessages;
+    }
 }
