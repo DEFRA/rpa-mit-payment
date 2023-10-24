@@ -22,7 +22,7 @@ steps:
     projectKey: 'defra_est-mit-payment'
     projectName: 'EST.MIT.Payment'
     extraProperties: |
-      sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/test/**,**/Program.cs,**/EST.Payment.Function.Test/**
+      sonar.exclusions=**/obj/**,**/*.dll,**/*.cshtml,**/*.css,**/*.js,**/*.json,**/wwwroot/**,**/test/**,**/Program.cs,**/EST.Payment.Function.Tests/**
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
       sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       $(additionalSonarParams)    

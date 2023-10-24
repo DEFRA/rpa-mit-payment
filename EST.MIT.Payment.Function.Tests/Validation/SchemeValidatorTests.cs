@@ -1,7 +1,7 @@
 using EST.MIT.Payment.Services;
 using EST.MIT.Payment.Interfaces;
 
-namespace EST.MIT.Payment.Function.Test.Validation;
+namespace EST.MIT.Payment.Function.Tests.Validation;
 
 public class SchemeValidatorTests
 {

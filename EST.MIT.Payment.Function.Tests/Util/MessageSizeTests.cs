@@ -2,7 +2,7 @@ using System.Text;
 using EST.MIT.Payment.Function.Util;
 using Newtonsoft.Json;
 
-namespace EST.MIT.Payment.Function.Test.Unil;
+namespace EST.MIT.Payment.Function.Tests.Util;
 
 public class MessageSizeTests
 {

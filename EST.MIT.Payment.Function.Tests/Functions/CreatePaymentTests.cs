@@ -1,28 +1,34 @@
-﻿using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using EST.MIT.Payment.Function.Functions;
 using EST.MIT.Payment.Models;
 using EST.MIT.Payment.Interfaces;
 
-namespace EST.MIT.Payment.Function.Test;
+namespace EST.MIT.Payment.Function.Tests;
 public class CreatePaymentTests
 {
     private readonly CreatePayment _createPayment;
-    private readonly Mock<IDurableOrchestrationClient> _mockDurableOrchestrationClient;
-    private readonly Mock<IBinder> _mockBinder;
-    private readonly Mock<ILogger> _mockLogger;
+    private readonly Mock<ILogger<CreatePayment>> _mockLogger;
+    private readonly Mock<IServiceBus> _mockServiceBus;
+    private readonly Mock<ISchemeValidator> _mockSchemeValidator;
     private readonly Mock<IEventQueueService> _mockEventQueueService;
 
     public CreatePaymentTests()
     {
         _mockEventQueueService = new Mock<IEventQueueService>();
-        _createPayment = new CreatePayment(_mockEventQueueService.Object);
-        _mockDurableOrchestrationClient = new Mock<IDurableOrchestrationClient>();
-        _mockBinder = new Mock<IBinder> { CallBase = true };
-        _mockLogger = new Mock<ILogger>();
+        _mockServiceBus = new Mock<IServiceBus>();
+        _mockSchemeValidator = new Mock<ISchemeValidator>();
+        _mockLogger = new Mock<ILogger<CreatePayment>>();
+        _mockLogger.Setup(x => x.Log(
+            LogLevel.Information,
+            It.IsAny<EventId>(),
+            It.IsAny<object>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<object, Exception, string>>()));
+        var mockLoggerFactory = new Mock<ILoggerFactory>();
+        mockLoggerFactory.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _mockLogger.Object);
+        _createPayment = new CreatePayment(_mockEventQueueService.Object, _mockServiceBus.Object, _mockSchemeValidator.Object, mockLoggerFactory.Object);
     }
 
     [Fact]
@@ -65,7 +71,7 @@ public class CreatePaymentTests
                                 PaymentRequestNumber = 34567,
                                 SourceSystem = "sourceSystem",
                                 Value = 2,
-                                Currency = "£",
+                                Currency = "GBP",
                                 Description = "Description",
                                 InvoiceCorrectionReference = "ERQ567",
                                 OriginalInvoiceNumber = "23ER56",
@@ -87,14 +93,8 @@ public class CreatePaymentTests
         };
 
         string message = JsonConvert.SerializeObject(paymentRequest);
-        const string functionName = "PaymentOrchestrator";
-        const string instanceId = "7E467BDB-213F-407A-B86A-1954053D3C24";
 
-        _mockDurableOrchestrationClient.
-           Setup(x => x.StartNewAsync(functionName, It.IsAny<object>())).
-            ReturnsAsync(instanceId);
-
-        var result = _createPayment?.Run(message, _mockDurableOrchestrationClient.Object, _mockBinder.Object, _mockLogger.Object);
+        var result = _createPayment?.Run(message);
 
         _mockLogger.Verify(
     x => x.Log(
@@ -104,15 +104,11 @@ public class CreatePaymentTests
         It.IsAny<Exception>(),
         It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-        _mockDurableOrchestrationClient.Verify(
-            x => x.StartNewAsync(functionName, It.IsAny<object>()),
-            Times.Once);
-
         _mockLogger.Verify(
             x => x.Log(
                 It.IsAny<LogLevel>(),
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Started orchestration with ID = '{instanceId}'."),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Executing Service Bus For Strategic Payments...schemeExists=False"),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
@@ -167,26 +163,24 @@ public class CreatePaymentTests
         };
 
         string message = JsonConvert.SerializeObject(InvalidPaymentRequest);
-        const string functionName = "PaymentOrchestrator";
-        const string instanceId = "7E467BDB-213F-407A-B86A-1954053D3C24";
 
-        _mockDurableOrchestrationClient.
-           Setup(x => x.StartNewAsync(functionName, It.IsAny<object>())).
-            ReturnsAsync(instanceId);
-
-        _createPayment?.Run(message, _mockDurableOrchestrationClient.Object, _mockBinder.Object, _mockLogger.Object);
+        _createPayment?.Run(message);
 
         _mockLogger.Verify(
-    x => x.Log(
-    It.IsAny<LogLevel>(),
-    It.IsAny<EventId>(),
-    It.Is<It.IsAnyType>((v, t) => v.ToString() == $"C# Queue trigger function processed: {message}"),
-    It.IsAny<Exception>(),
-    It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
+            x => x.Log(
+            It.IsAny<LogLevel>(),
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) => v.ToString() == $"C# Queue trigger function processed: {message}"),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-        _mockDurableOrchestrationClient.Verify(
-            x => x.StartNewAsync(functionName, It.IsAny<object>()),
-            Times.Never);
+        _mockLogger.Verify(
+            x => x.Log(
+            It.IsAny<LogLevel>(),
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) => v.ToString() == $"Payment request is not valid"),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
     }
 
     [Fact]
@@ -194,7 +188,7 @@ public class CreatePaymentTests
     {
         string? message = null;
 
-        _createPayment?.Run(message, _mockDurableOrchestrationClient.Object, _mockBinder.Object, _mockLogger.Object);
+        _createPayment?.Run(message);
 
         _mockLogger.Verify(
             x => x.Log(
@@ -205,9 +199,7 @@ public class CreatePaymentTests
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
 
-        _mockDurableOrchestrationClient.Verify(
-            x => x.StartNewAsync(It.IsAny<string>(), It.IsAny<object>()),
-            Times.Never);
+        // TODO - check result
     }
 
     [Fact]
@@ -215,7 +207,7 @@ public class CreatePaymentTests
     {
         string message = "{ 'invalid': 'json' }";
 
-        _createPayment?.Run(message, _mockDurableOrchestrationClient.Object, _mockBinder.Object, _mockLogger.Object);
+        _createPayment?.Run(message);
 
         _mockLogger.Verify(
             x => x.Log(
@@ -226,8 +218,6 @@ public class CreatePaymentTests
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
 
-        _mockDurableOrchestrationClient.Verify(
-            x => x.StartNewAsync(It.IsAny<string>(), It.IsAny<object>()),
-            Times.Never);
+        // TODO - check result
     }
 }

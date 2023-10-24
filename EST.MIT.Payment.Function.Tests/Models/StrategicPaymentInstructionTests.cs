@@ -1,14 +1,13 @@
 using System.Globalization;
 using EST.MIT.Payment.Models;
 
-namespace EST.MIT.Payment.Function.Test.Models;
+namespace EST.MIT.Payment.Function.Tests.Models;
 
-public class StrategicPaymentTransactionTests
+public class StrategicPaymentInstructionTests
 {
     [Fact]
-    public void PaymentTransactionT_Get_and_Set()
+    public void PaymentInstruction_Get_and_Set()
     {
-        var transaction = new StrategicPaymentTransaction();
         var instruction = new StrategicPaymentInstruction
         {
             SourceSystem = "AHWR",
@@ -37,10 +36,23 @@ public class StrategicPaymentTransactionTests
             DueDate = DateTime.ParseExact("17/06/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture),
             Currency = "GBP"
         };
-        transaction.Accepted = true;
-        transaction.paymentInstruction = instruction;
 
-        Assert.Same(instruction, transaction.paymentInstruction);
-        Assert.True(transaction.Accepted);
+        Assert.Equal("AHWR", instruction.SourceSystem);
+        Assert.Equal(999999999, instruction.Sbi);
+        Assert.Equal(2022, instruction.MarketingYear);
+        Assert.Equal(1, instruction.PaymentRequestNumber);
+        Assert.Equal("VV-6D85-0EC1", instruction.AgreementNumber);
+        Assert.Equal(43600, instruction.Value);
+        Assert.NotNull(instruction.PaymentDetails);
+        Assert.Single(instruction.PaymentDetails);
+        Assert.Equal(new Guid("79cf1fd1-6687-488a-8004-95547ec83e52"), instruction.CorrelationId);
+        Assert.Equal(4, instruction.SchemeId);
+        Assert.Equal("VV-6D85-0EC1V001", instruction.InvoiceNumber);
+        Assert.Equal("AP", instruction.Ledger);
+        Assert.Equal(1102057452, instruction.Frn);
+        Assert.Equal("RP00", instruction.DeliveryBody);
+
+        var expectedDueDate = DateTime.ParseExact("17/06/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        Assert.Equal(expectedDueDate, instruction.DueDate);
     }
 }

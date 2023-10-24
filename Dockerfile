@@ -1,72 +1,51 @@
 # development
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS development
 
-RUN mkdir -p /home/dotnet/EST.MIT.Payment.Function.Test/ /home/dotnet/EST.MIT.Payment.Function/
+RUN mkdir -p /home/dotnet/EST.MIT.Payment.Function.Tests/ /home/dotnet/EST.MIT.Payment.Function/
 
-COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function.Test/*.csproj ./EST.MIT.Payment.Function.Test/
-RUN dotnet restore ./EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj
-
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function.Tests/*.csproj ./EST.MIT.Payment.Function.Tests/
 COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function/*.csproj ./EST.MIT.Payment.Function/
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Interfaces/*.csproj ./EST.MIT.Payment.Interfaces/
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Models/*.csproj ./EST.MIT.Payment.Models/
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Services/*.csproj ./EST.MIT.Payment.Services/
+
+RUN dotnet restore ./EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj
 RUN dotnet restore ./EST.MIT.Payment.Function/EST.MIT.Payment.Function.csproj
 
-# ARG PARENT_VERSION=1.5.0-dotnet6.0
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function /src/EST.MIT.Payment.Function
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Interfaces /src/EST.MIT.Payment.Interfaces
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Models /src/EST.MIT.Payment.Models
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Services /src/EST.MIT.Payment.Services
+RUN cd /src/EST.MIT.Payment.Function && \
+    mkdir -p /home/site/wwwroot && \
+    dotnet publish *.csproj --output /home/site/wwwroot
 
-# # Development
-# FROM defradigital/dotnetcore-development:$PARENT_VERSION AS development
+FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4.1.3-dotnet-isolated6.0-appservice
+ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
+    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 
-# ARG PARENT_VERSION
+ENV ASPNETCORE_URLS=http://+:3000
+ENV FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
 
-# LABEL uk.gov.defra.parent-image=defra-dotnetcore-development:${PARENT_VERSION}
-
-# RUN mkdir -p /home/dotnet/EST.MIT.Payment.DataAccess/ /home/dotnet/EST.MIT.Payment.Function/ /home/dotnet/EST.MIT.Payment.Function.Test/ /home/dotnet/EST.MIT.Payment.Interfaces/ /home/dotnet/EST.MIT.Payment.Models/ /home/dotnet/EST.MIT.Payment.Services/
-
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.DataAccess/*.csproj ./EST.MIT.Payment.DataAccess/
-# RUN dotnet restore ./EST.MIT.Payment.DataAccess/EST.MIT.Payment.DataAccess.csproj
-
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function/*.csproj ./EST.MIT.Payment.Function/
-# RUN dotnet restore ./EST.MIT.Payment.Function/EST.MIT.Payment.Function.csproj
-
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function.Test/*.csproj ./EST.MIT.Payment.Function.Test/
-# RUN dotnet restore ./EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj
-
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Interfaces/*.csproj ./EST.MIT.Payment.Interfaces/
-# RUN dotnet restore ./EST.MIT.Payment.Interfaces/EST.MIT.Payment.Interfaces.csproj
-
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Models/*.csproj ./EST.MIT.Payment.Models/
-# RUN dotnet restore ./EST.MIT.Payment.Models/EST.MIT.Payment.Models.csproj
-
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Services/*.csproj ./EST.MIT.Payment.Services/
-# RUN dotnet restore ./EST.MIT.Payment.Services/EST.MIT.Payment.Services.csproj
+COPY --from=development ["/home/site/wwwroot", "/home/site/wwwroot"]
 
 
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.DataAccess/ ./EST.MIT.Payment.DataAccess/
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function/ ./EST.MIT.Payment.Function/
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function.Test/ ./EST.MIT.Payment.Function.Test/
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Interfaces/ ./EST.MIT.Payment.Interfaces/
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Models/ ./EST.MIT.Payment.Models/
-# COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Services/ ./EST.MIT.Payment.Services/
+# production
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS production
 
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Function /src/EST.MIT.Payment.Function
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Interfaces /src/EST.MIT.Payment.Interfaces
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Models /src/EST.MIT.Payment.Models
+COPY --chown=dotnet:dotnet ./EST.MIT.Payment.Services /src/EST.MIT.Payment.Services
+RUN cd /src/EST.MIT.Payment.Function && \
+    mkdir -p /home/site/wwwroot && \
+    dotnet publish *.csproj -c Release --output /home/site/wwwroot
 
-# RUN dotnet publish ./EST.MIT.Payment.Function/ -c Release -o /home/dotnet/out
+FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4.1.3-dotnet-isolated6.0-appservice
+ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
+    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 
-# ARG PORT=3000
-# ENV PORT ${PORT}
-# EXPOSE ${PORT}
+ENV ASPNETCORE_URLS=http://+:3000
+ENV FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
 
-# CMD dotnet watch --project ./EST.MIT.Payment.Function run --urls "http://*:${PORT}"
-
-# # Production
-# FROM defradigital/dotnetcore:$PARENT_VERSION AS production
-
-# ARG PARENT_VERSION
-# ARG PARENT_REGISTRY
-
-# LABEL uk.gov.defra.parent-image=defra-dotnetcore-development:${PARENT_VERSION}
-
-# ARG PORT=3000
-# ENV ASPNETCORE_URLS=http://*:${PORT}
-# EXPOSE ${PORT}
-
-# COPY --from=development /home/dotnet/out/ ./
-
-# CMD dotnet EST.MIT.Payment.Function.dll
+COPY --from=production ["/home/site/wwwroot", "/home/site/wwwroot"]

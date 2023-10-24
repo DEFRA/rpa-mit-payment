@@ -5,6 +5,4 @@ namespace EST.MIT.Payment.Interfaces;
 public interface IStrategicPaymentTransactionJsonGenerator
 {
     string Generate(StrategicPaymentTransaction strategicPaymentTransaction);
-    Task Send(StrategicPaymentTransaction strategicPayment);
-    Task SendError(StrategicPaymentTransaction strategicPayment);   
 }

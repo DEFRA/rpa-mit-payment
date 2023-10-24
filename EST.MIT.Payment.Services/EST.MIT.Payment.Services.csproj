@@ -9,11 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.15.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.1.3" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EST.MIT.Payment.DataAccess\EST.MIT.Payment.DataAccess.csproj" />
     <ProjectReference Include="..\EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj" />
     <ProjectReference Include="..\EST.MIT.Payment.Models\EST.MIT.Payment.Models.csproj" />
   </ItemGroup>

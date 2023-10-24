@@ -1,6 +1,6 @@
 # Introduction 
 This repository contains the code for consuming the payment generator for MIT
-The Invoices created in MIT need to reach one of two destinations, Strategics Payments (SPS) or Transformation Layer (TL). The destination is determined by the scheme type. Depending of scheme type the Payment Generator will create either a Json message to be place on a Service Bus queue for SPS or an XML file to be placed in Blob Storage for the TL.
+The Invoices created in MIT need to proxied to SPS via Service Bus. Any processed messages are audited by the rpa-mit-events service (by sending a message to the rpa-mit-events queue).
  
 # Getting Started
 ## Azurite
@@ -11,12 +11,13 @@ Follow the following guide to setup Azurite:
 
 ## Storage
 
-The function app uses Azure Storage for Table and Queue.
+The function app uses Azure Storage for Queue but you will need to set up an appropriate Service Bus queue in Azure.
 
 The function app requires:
 
-- Queue name: `Payment`
-- Table name: `Payment`
+- Storage Queue name: `rpa-mit-payment`
+- Storage Queue name: `rpa-mit-events`
+- Service Bus Queue name: `rpa-mit-payment`
 
 ## local.settings
 ```
@@ -24,11 +25,12 @@ The function app requires:
     "IsEncrypted": false,
     "Values": {
         "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
         "QueueConnectionString": "UseDevelopmentStorage=true",
-        "TableConnectionString": "UseDevelopmentStorage=true",
-        "BlobConnectionString": "UseDevelopmentStorage=true",
-        "PaymentBlobContainer": "Payment",
+        "EventQueueName": "rpa-mit-events",
+        "PaymentQueueName": "rpa-mit-payment",
+        "ServiceBusConnectionString": "--SECRET--",
+        "ServiceBusQueueName": "rpa-mit-payment",
         "Schemes": "bps,cs"
     }
 }
@@ -37,48 +39,55 @@ The function app requires:
 
 ### Message Example
 {
-"invoices": [
-   {
-     "id": "string",
-     "invoiceType": "string",
-     "accountType": "string",
-     "organisation": "string",
-     "schemeType": "string",
-     "paymentRequests": [
-       {
-         "paymentRequestId": "string",
-         "frn": 0,
-         "sourceSystem": "string",
-         "marketingYear": 0,
-         "deliveryBody": "string",
-         "paymentRequestNumber": 0,
-         "agreementNumber": "string",
-         "contractNumber": "string",
-         "value": 0,
-         "dueDate": "string",
-         "invoiceLines": [
-           {
-             "value": 0,
-             "currency": "string",
-             "schemeCode": "string",
-             "description": "string",
-             "fundCode": "string"
-           }
-         ],
-         "appendixReferences": {
-           "claimReferenceNumber": "string"
-         }
-       }
-     ],
-     "status": "string",
-     "reference": "string",
-     "created": "2023-04-03T07:18:19.457Z",
-     "updated": "2023-04-03T07:18:19.457Z",
-     "createdBy": "string",
-     "updatedBy": "string"
-   }
-]
+  "schemeType": "AD",
+  "paymentRequestsBatches": [
+    {
+      "id": "1",
+      "accountType": "AD",
+      "organisation": "FGH",
+      "schemeType": "AD",
+      "paymentType": "AP",
+      "paymentRequests": [
+        {
+          "paymentRequestId": "2",
+          "frn": 56789043,
+          "sbi": 4567,
+          "vendor": "A",
+          "sourceSystem": "sourceSystem",
+          "marketingYear": 2023,
+          "currency": "GBP",
+          "description": "Description",
+          "originalInvoiceNumber": "23ER56",
+          "originalSettlementDate": "2023-10-19T13:11:17.58488+01:00",
+          "recoveryDate": "2023-10-19T13:11:17.584896+01:00",
+          "invoiceCorrectionReference": "ERQ567",
+          "paymentRequestNumber": 34567,
+          "agreementNumber": "12345",
+          "value": 2,
+          "dueDate": "string",
+          "invoiceLines": [
+            {
+              "value": 3,
+              "schemeCode": "D4ERT",
+              "description": "This is a description",
+              "fundCode": "2ADC",
+              "mainAccount": "AccountA",
+              "marketingYear": 2022,
+              "deliveryBody": "DeliveryBody"
+            }
+          ]
+        }
+      ],
+      "status": "A",
+      "reference": "123",
+      "created": "2022-11-05T00:00:00",
+      "updated": "2023-10-19T13:11:17.584978+01:00",
+      "createdBy": "username1",
+      "updatedBy": "username1"
+    }
+  ]
 }
+
 
 # Build and Test
 
@@ -87,7 +96,5 @@ The easiest way to build the project is with VS2022. It should download all requ
 Run the tests using the VS2022 Test Explorer.
 
 ## Useful links
-
-- [gov Notify](https://www.notifications.service.gov.uk/using-notify/api-documentation)
 
 - [Use dependency injection in .NET Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/functions-dotnet-dependency-injection)

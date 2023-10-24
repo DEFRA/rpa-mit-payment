@@ -1,69 +1,95 @@
-using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using EST.MIT.Payment.Models;
-using EST.MIT.Payment.Interfaces;
+﻿using System;
 using EST.MIT.Payment.Function.Util;
 using EST.MIT.Payment.Function.Validation;
+using System.Threading.Tasks;
+using EST.MIT.Payment.Interfaces;
+using EST.MIT.Payment.Models;
+using Microsoft.Azure.Functions.Worker;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
-namespace EST.MIT.Payment.Function.Functions;
-public class CreatePayment
+namespace EST.MIT.Payment.Function.Functions
 {
-    private readonly IEventQueueService _eventQueueService;
-    public CreatePayment(IEventQueueService eventQueueService)
-    {
-        _eventQueueService = eventQueueService;
-    }
+	public class CreatePayment
+	{
+        private readonly IEventQueueService _eventQueueService;
+        private readonly IServiceBus _serviceBus;
+        private readonly ISchemeValidator _schemeValidator;
+        private readonly ILogger _logger;
 
-    [FunctionName("CreatePayment")]
-    public async Task Run(
-    [QueueTrigger("payment", Connection = "QueueConnectionString")] string paymentRequestMsg,
-    [DurableClient] IDurableOrchestrationClient starter,
-    IBinder blobBinder,
-    ILogger log)
-    {
-        log.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
-
-        InvoiceScheme invoiceScheme;
-
-        if (paymentRequestMsg == null)
+        public CreatePayment(IEventQueueService eventQueueService, IServiceBus serviceBus, ISchemeValidator schemeValidator, ILoggerFactory loggerFactory)
         {
-            log.LogError("Payment request is null");
-            await _eventQueueService.CreateMessage("failed", "paymentrequest", "Payment request is null", paymentRequestMsg);
-            return;
+            _eventQueueService = eventQueueService;
+            _schemeValidator = schemeValidator;
+            _serviceBus = serviceBus;
+            _logger = loggerFactory.CreateLogger("CreatePayment");
         }
 
-        var isValid = ValidateRequest.IsValid(paymentRequestMsg);
-
-        if (!isValid)
+        [Function("CreatePayment")]
+        public async Task Run(
+            [QueueTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] string paymentRequestMsg)
         {
-            log.LogError("Payment request is not valid");
-            return;
-        }
+            _logger.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
 
-        try
-        {
-            invoiceScheme = JsonConvert.DeserializeObject<InvoiceScheme>(paymentRequestMsg);
+            InvoiceScheme invoiceScheme;
 
-            if (invoiceScheme.SchemeType == null)
+            if (paymentRequestMsg == null)
             {
-                await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request is Transformation Layer", paymentRequestMsg);
+                _logger.LogError("Payment request is null");
+                await _eventQueueService.CreateMessage("failed", "paymentrequest", "Payment request is null", paymentRequestMsg);
+                return;
+            }
+
+            var isValid = ValidateRequest.IsValid(paymentRequestMsg);
+
+            if (!isValid)
+            {
+                _logger.LogError("Payment request is not valid");
+                var errors = ValidateRequest.GetValidationErrors(paymentRequestMsg);
+                foreach (var error in errors)
+                {
+                    _logger.LogError($"JSON validation error: {error}");
+                }
+                return;
+            }
+
+            try
+            {
+                invoiceScheme = JsonConvert.DeserializeObject<InvoiceScheme>(paymentRequestMsg);
+
+                if (invoiceScheme.SchemeType == null)
+                {
+                    await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request is Transformation Layer", paymentRequestMsg);
+                }
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "Error deserializing payment request");
+                return;
+            }
+
+            _logger.LogInformation($"Payment request size: {MessageSize.GetMessageSize(invoiceScheme)}kb");
+
+            try
+            {
+                await _eventQueueService.CreateMessage("sending", "paymentrequest", "payment request about to send", paymentRequestMsg);
+
+                var schemeType = invoiceScheme.SchemeType;
+                var schemeExists = _schemeValidator.ValueExists(schemeType);
+
+                _logger.LogInformation($"Executing Service Bus For Strategic Payments...schemeExists={schemeExists}");
+
+                string message = JsonConvert.SerializeObject(invoiceScheme);
+
+                await _serviceBus.SendServiceBus(message);
+
+                await _eventQueueService.CreateMessage("sent", "paymentrequest", "payment request sent", paymentRequestMsg);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending payment request to service bus");
+                await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request failed", paymentRequestMsg);
             }
         }
-        catch (JsonException ex)
-        {
-            log.LogError(ex, "Error deserializing payment request");
-            return;
-        }
-
-        log.LogInformation($"Payment request size: {MessageSize.GetMessageSize(invoiceScheme)}kb");
-
-        await _eventQueueService.CreateMessage("sent", "paymentrequest", "payment request sent", paymentRequestMsg);
-
-        var instanceId = await starter.StartNewAsync("PaymentOrchestrator", invoiceScheme);
-
-        log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
     }
 }

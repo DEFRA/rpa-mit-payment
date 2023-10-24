@@ -2,30 +2,16 @@ using EST.MIT.Payment.Services;
 using EST.MIT.Payment.Interfaces;
 using EST.MIT.Payment.Models;
 using System.Globalization;
-using Moq;
-using Microsoft.Extensions.Configuration;
-using Azure.Messaging.ServiceBus;
 
-namespace EST.MIT.Payment.Function.Test.Services;
+namespace EST.MIT.Payment.Function.Tests.Services;
 
 public class StrategicPaymentTransactionJsonGeneratorTests
 {
     private readonly IStrategicPaymentTransactionJsonGenerator _generator;
-    private readonly Mock<IConfiguration> _mockConfiguration;
-    private readonly Mock<ServiceBusClient> _mockServiceBusClient;
-    private readonly Mock<ServiceBusSender> _mockServiceBusSender;
-    private readonly ServiceBusMessage _serviceBusMessage;
 
     public StrategicPaymentTransactionJsonGeneratorTests()
     {
-        _mockConfiguration = new Mock<IConfiguration>();
-        _mockServiceBusClient = new Mock<ServiceBusClient>();
-        _mockServiceBusSender = new Mock<ServiceBusSender>();
-        _serviceBusMessage = new ServiceBusMessage();
-        _mockConfiguration.Setup(x => x["ConnectionString"]).Returns("Endpoint=sb://paymentgenerator.servicebus.windows.net/;SharedAccessKeyName=SenderPolicy;SharedAccessKey=eCcIV666vfuLtjU4dtBk0xqS1oZFF7AlT+ASbJo2sV0=");
-        _mockConfiguration.Setup(x => x["QueueName"]).Returns("paymentgeneratorqueue");
-        _mockConfiguration.Setup(x => x["QueueNameError"]).Returns("paymentgeneratorerror");
-        _generator = new StrategicPaymentTransactionJsonGenerator(_mockConfiguration.Object, _mockServiceBusClient.Object, _serviceBusMessage);
+        _generator = new StrategicPaymentTransactionJsonGenerator();
     }
 
     [Fact]
@@ -262,102 +248,5 @@ public class StrategicPaymentTransactionJsonGeneratorTests
         Assert.Equal(errorMessage, paymentTransaction.paymentInstruction.Error);
         Assert.False(paymentTransaction.Accepted);
         Assert.True(paymentTransaction.paymentInstruction.DueDate < DateTime.Now);
-    }
-
-    [Fact]
-    public async void Test_Send_function()
-    {
-        var paymentTransaction = new StrategicPaymentTransaction
-        {
-            paymentInstruction = new StrategicPaymentInstruction
-            {
-                SourceSystem = "AHWR",
-                Sbi = 999999999,
-                MarketingYear = 2022,
-                PaymentRequestNumber = 1,
-                AgreementNumber = "VV-6D85-0EC1",
-                Value = 43600,
-                PaymentDetails = new List<StrategicPaymentDetail>
-                {
-                    new StrategicPaymentDetail
-                    {
-                        StandardCode = "AHWR-Sheep",
-                        Description = "G00 - Gross value of claim",
-                        Value = 43600,
-                        SchemeCode = "18001",
-                        FundCode = "DOM10"
-                    }
-                },
-                CorrelationId = new Guid("79cf1fd1-6687-488a-8004-95547ec83e52"),
-                SchemeId = 4,
-                InvoiceNumber = "VV-6D85-0EC1V001",
-                Ledger = "AP",
-                Frn = 1102057452,
-                DeliveryBody = "RP00",
-                DueDate = DateTime.ParseExact("17/06/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                Currency = "GBP"
-            },
-            Accepted = true
-        };
-
-        _mockServiceBusClient.Setup(x => x.CreateSender(It.IsAny<string>()))
-                                .Returns(_mockServiceBusSender.Object);
-
-        ServiceBusMessage serviceBusMessage = new ServiceBusMessage();
-
-        _mockServiceBusSender.Setup(x => x.SendMessageAsync(serviceBusMessage, default)).Returns(Task.CompletedTask);
-
-        _mockServiceBusSender.Setup(x => x.DisposeAsync()).Returns(ValueTask.CompletedTask);
-        _mockServiceBusClient.Setup(x => x.DisposeAsync()).Returns(ValueTask.CompletedTask);
-
-        await _generator.Send(paymentTransaction);
-    }
-
-    [Fact]
-    public async void Test_SendError()
-    {
-        var paymentTransaction = new StrategicPaymentTransaction
-        {
-            paymentInstruction = new StrategicPaymentInstruction
-            {
-                SourceSystem = "AHWR",
-                Sbi = 999999999,
-                MarketingYear = 2024,
-                PaymentRequestNumber = 1,
-                AgreementNumber = "VV-6D85-0EC1",
-                Value = -5,
-                PaymentDetails = new List<StrategicPaymentDetail>
-                {
-                    new StrategicPaymentDetail
-                    {
-                        StandardCode = "AHWR-Sheep",
-                        Description = "G00 - Gross value of claim",
-                        Value = 43600,
-                        SchemeCode = "18001",
-                        FundCode = "DOM10"
-                    }
-                },
-                CorrelationId = new Guid("79cf1fd1-6687-488a-8004-95547ec83e52"),
-                InvoiceNumber = "VV-6D85-0EC1V001",
-                Ledger = "AP",
-                Frn = 1102057452,
-                DeliveryBody = "RP00",
-                DueDate = DateTime.ParseExact("17/06/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                Currency = "GBP",
-                Error = "Error: The Value of Invoice has to be greater than zero."
-            }
-        };
-
-        _mockServiceBusClient.Setup(x => x.CreateSender(It.IsAny<string>()))
-                        .Returns(_mockServiceBusSender.Object);
-
-        ServiceBusMessage serviceBusMessage = new ServiceBusMessage();
-
-        _mockServiceBusSender.Setup(x => x.SendMessageAsync(serviceBusMessage, default)).Returns(Task.CompletedTask);
-
-        _mockServiceBusSender.Setup(x => x.DisposeAsync()).Returns(ValueTask.CompletedTask);
-        _mockServiceBusClient.Setup(x => x.DisposeAsync()).Returns(ValueTask.CompletedTask);
-
-        await _generator.SendError(paymentTransaction);
     }
 }

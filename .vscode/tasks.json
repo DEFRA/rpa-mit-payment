@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj",
+        "${workspaceFolder}/EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj",
+        "${workspaceFolder}/EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -33,7 +33,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/EST.MIT.Payment.Function.Test/EST.MIT.Payment.Function.Test.csproj"
+        "${workspaceFolder}/EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj"
       ],
       "problemMatcher": "$msCompile"
     }
