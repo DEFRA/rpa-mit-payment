@@ -1,5 +1,5 @@
-using EST.MIT.Payment.Services;
 using EST.MIT.Payment.Interfaces;
+using EST.MIT.Payment.Function.Validation;
 
 namespace EST.MIT.Payment.Function.Tests.Validation;
 

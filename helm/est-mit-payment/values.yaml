@@ -6,12 +6,14 @@ image: est-mit-payment
 
 labels: {}
 
-azureIdentity:
-  resourceID: dummy
-  clientID: dummy
+aadPodIdentity: true
 
 appInsights:
-  connectionString:
+  key:
+
+azureIdentity:
+  clientID: not-a-real-clientID
+  resourceID: not-a-real-resourceID
 
 containerConfigMap:
   name: est-mit-payment-config-map
@@ -34,6 +36,8 @@ container:
   limitMemory: 120Mi
   limitCpu: 120m
   port: 3000
+  functionsWorkerRuntime: dotnet-isolated
+  azureWebJobsSecretStorageType: files
   azureWebJobsStorage: secret
   comPlusEnableDiagnostics: 0
   serviceBusConnectionString__fullyQualifiedNamespace: value-from-app-config-service
@@ -44,8 +48,16 @@ container:
   eventQueueName: value-from-app-config-service
   paymentQueueName: value-from-app-config-service
   
-volumeMounts:
-  mountPath: /var/www/
-  name: core-app-dir
+livenessProbe:
+  path: /healthz
+  port: 3000
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 3
 
-aadPodIdentity: true
+readinessProbe:
+  path: /healthy
+  port: 3000
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  failureThreshold: 3

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using EST.MIT.Payment.Interfaces;
 
-namespace EST.MIT.Payment.Services;
+namespace EST.MIT.Payment.Function.Validation;
 
 public class SchemeValidator : ISchemeValidator
 {

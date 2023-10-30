@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using EST.MIT.Payment.Function.Services;
+using EST.MIT.Payment.Function.Validation;
 using EST.MIT.Payment.Interfaces;
-using EST.MIT.Payment.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

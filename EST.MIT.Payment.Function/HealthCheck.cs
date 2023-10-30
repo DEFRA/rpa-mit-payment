@@ -3,7 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
-namespace RPA.MIT.Notification;
+namespace EST.MIT.Payment.Function;
 
 public class HealthCheck
 {
