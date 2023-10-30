@@ -49,14 +49,14 @@ container:
   paymentQueueName: value-from-app-config-service
   
 livenessProbe:
-  path: /healthz
+  path: /api/healthz
   port: 3000
   initialDelaySeconds: 60
   periodSeconds: 30
   failureThreshold: 3
 
 readinessProbe:
-  path: /healthy
+  path: /api/healthy
   port: 3000
   initialDelaySeconds: 60
   periodSeconds: 30
