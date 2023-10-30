@@ -5,7 +5,4 @@ spec:
     spec:
       containers:
       - {{ include "ffc-helm-library.container" (list . "est-mit-payment.container") }}
-      volumes:
-      - name: {{ .Values.volumeMounts.name }}
-        emptyDir: {}
 {{- end -}}
