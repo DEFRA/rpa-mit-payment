@@ -1,4 +1,4 @@
-# Introduction
+# Introduction 
 This repository contains the code for consuming the payment generator for MIT
 The Invoices created in MIT need to proxied to SPS via Service Bus. Any processed messages are audited by the rpa-mit-events service (by sending a message to the rpa-mit-events queue).
  
