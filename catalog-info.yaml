@@ -4,14 +4,14 @@ metadata:
   name: rpa-mit-payment-generator
   description: The MIT payment generator service
   annotations:
-    github.com/project-slug: defra/rpa-mit-payment-generator
+    github.com/project-slug: defra/est-mit-payment
     dev.azure.com/project: DEFRA-MIT
     dev.azure.com/build-definition: rpa-mit-payment-generator
     sonarqube.org/project-key: rpa-mit-payment-generator
     grafana/dashboard-selector: "folderTitle == 'Managed Prometheus'"
     backstage.io/kubernetes-id: rpa-mit-payment-generator
   links:
-    - url: https://github.com/DEFRA/rpa-mit-payment-generator
+    - url: https://github.com/DEFRA/est-mit-payment
       title: View repository
       icon: github
     - url: https://sonarcloud.io/summary/overall?id=rpa-mit-payment-generator
