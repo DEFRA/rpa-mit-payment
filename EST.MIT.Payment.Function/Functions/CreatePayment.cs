@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using Azure.Messaging.ServiceBus;
 using EST.MIT.Payment.Function.Util;
 using EST.MIT.Payment.Function.Validation;
-using System.Threading.Tasks;
 using EST.MIT.Payment.Interfaces;
 using EST.MIT.Payment.Models;
-using Microsoft.Azure.Functions.Worker;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
+using EST.MIT.Payment.Services;
 
 namespace EST.MIT.Payment.Function.Functions
 {
@@ -26,9 +28,9 @@ namespace EST.MIT.Payment.Function.Functions
         }
 
         [Function("CreatePayment")]
-        public async Task Run(
-            [QueueTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] string paymentRequestMsg)
+        public async Task Run([ServiceBusTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] ServiceBusReceivedMessage message)
         {
+            string paymentRequestMsg = message.Body.ToString();
             _logger.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
 
             InvoiceScheme invoiceScheme;
@@ -79,9 +81,7 @@ namespace EST.MIT.Payment.Function.Functions
 
                 _logger.LogInformation($"Executing Service Bus For Strategic Payments...schemeExists={schemeExists}");
 
-                string message = JsonConvert.SerializeObject(invoiceScheme);
-
-                await _serviceBus.SendServiceBus(message);
+                await _serviceBus.SendServiceBus(JsonConvert.SerializeObject(invoiceScheme).EncodeMessage());
 
                 await _eventQueueService.CreateMessage("sent", "paymentrequest", "payment request sent", paymentRequestMsg);
             }
