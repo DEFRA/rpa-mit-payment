@@ -6,9 +6,7 @@
     "QueueConnectionString": "UseDevelopmentStorage=true",
     "EventQueueName": "rpa-mit-events",
     "PaymentQueueName": "rpa-mit-payment",
-    "ServiceBusConnectionString": "__SERVICEBUSCONNECTIONSTRING__",
-    "PaymentHubQueueName": "rpa-mit-payment",
-    "Schemes": "__SCHEMES__"
+    "Schemes": "__SCHEMES__",
+    "PaymentHubQueueName": "__PAYMENTHUBQUEUENAME__"
   }
 }
-  
