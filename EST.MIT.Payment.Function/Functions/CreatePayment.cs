@@ -30,7 +30,7 @@ namespace EST.MIT.Payment.Function.Functions
         [Function("CreatePayment")]
         public async Task Run([ServiceBusTrigger("%PaymentQueueName%", Connection = "QueueConnectionString")] ServiceBusReceivedMessage message)
         {
-            string paymentRequestMsg = message.Body.ToString();
+            string paymentRequestMsg = message.Body.ToString().DecodeMessage();
             _logger.LogInformation($"C# Queue trigger function processed: {paymentRequestMsg}");
 
             InvoiceScheme invoiceScheme;
