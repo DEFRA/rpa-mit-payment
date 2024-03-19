@@ -9,6 +9,7 @@ using EST.MIT.Payment.Interfaces;
 using EST.MIT.Payment.Models;
 using Newtonsoft.Json;
 using EST.MIT.Payment.Services;
+using Newtonsoft.Json.Linq;
 
 namespace EST.MIT.Payment.Function.Functions
 {
@@ -38,7 +39,7 @@ namespace EST.MIT.Payment.Function.Functions
             if (paymentRequestMsg == null)
             {
                 _logger.LogError("Payment request is null");
-                await _eventQueueService.CreateMessage("failed", "paymentrequest", "Payment request is null", paymentRequestMsg);
+                await _eventQueueService.CreateMessage("", "failed", "paymentrequest", "Payment request is null", paymentRequestMsg);
                 return;
             }
 
@@ -55,13 +56,16 @@ namespace EST.MIT.Payment.Function.Functions
                 return;
             }
 
+            string id = JObject.Parse(paymentRequestMsg)["paymentRequestsBatches"][0]["id"].ToString();
+
             try
             {
+                
                 invoiceScheme = JsonConvert.DeserializeObject<InvoiceScheme>(paymentRequestMsg);
 
                 if (invoiceScheme.SchemeType == null)
                 {
-                    await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request is Transformation Layer", paymentRequestMsg);
+                    await _eventQueueService.CreateMessage(id, "failed", "paymentrequest", "payment request is Transformation Layer", paymentRequestMsg);
                 }
             }
             catch (JsonException ex)
@@ -74,7 +78,7 @@ namespace EST.MIT.Payment.Function.Functions
 
             try
             {
-                await _eventQueueService.CreateMessage("sending", "paymentrequest", "payment request about to send", paymentRequestMsg);
+                await _eventQueueService.CreateMessage(id, "sending", "paymentrequest", "payment request about to send", paymentRequestMsg);
 
                 var schemeType = invoiceScheme.SchemeType;
                 var schemeExists = _schemeValidator.ValueExists(schemeType);
@@ -83,12 +87,12 @@ namespace EST.MIT.Payment.Function.Functions
 
                 await _serviceBus.SendServiceBus(JsonConvert.SerializeObject(invoiceScheme).EncodeMessage());
 
-                await _eventQueueService.CreateMessage("sent", "paymentrequest", "payment request sent", paymentRequestMsg);
+                await _eventQueueService.CreateMessage(id, "sent", "paymentrequest", "payment request sent", paymentRequestMsg);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error sending payment request to service bus");
-                await _eventQueueService.CreateMessage("failed", "paymentrequest", "payment request failed", paymentRequestMsg);
+                await _eventQueueService.CreateMessage(id, "failed", "paymentrequest", "payment request failed", paymentRequestMsg);
             }
         }
     }
