@@ -42,9 +42,9 @@ extends:
     deployFromFeature: ${{ parameters.deployFromFeature }}
     appBuildConfig:
       appFrameworkType: "dotnet"    
-      projectPath: "./RPA.MIT.Payment.Function/RPA.MIT.Payment.Function.csproj"
-      testProjectPath: "./RPA.MIT.Payment.Function.Tests/RPA.MIT.Payment.Function.Tests.csproj"
-      manifestPath: "./RPA.MIT.Payment.Function/obj/project.assets.json"
+      projectPath: "./EST.MIT.Payment.Function/RPA.MIT.Payment.Function.csproj"
+      testProjectPath: "./EST.MIT.Payment.Function.Tests/RPA.MIT.Payment.Function.Tests.csproj"
+      manifestPath: "./EST.MIT.Payment.Function/obj/project.assets.json"
       frameworkVersion: "6.x"
       imageRepoName: "rpa-mit-Payment"
     appTestConfig:
