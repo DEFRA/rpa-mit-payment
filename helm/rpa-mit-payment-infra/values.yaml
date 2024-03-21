@@ -1,0 +1,10 @@
+namespaceQueues:
+ - name: rpa-mit-events
+   roleAssignments:
+     - roleName: 'QueueSender'
+ - name: rpa-mit-payment
+   roleAssignments:
+     - roleName: 'QueueReceiver'
+ - name: payment-hub
+   roleAssignments:
+     - roleName: 'QueueReceiver'

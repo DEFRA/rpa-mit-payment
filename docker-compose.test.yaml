@@ -4,8 +4,8 @@ services:
   est-mit-payment:
     build:
       target: development
-    image: est-mit-payment-development
-    container_name: est-mit-payment-test
+    image: rpa-mit-payment-development
+    container_name: rpa-mit-payment-test
     entrypoint: dotnet test ./EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='./test-output/'
     volumes:
       - ./EstMitPaymentFunction:/home/dotnet/EST.MIT.Payment.Function
