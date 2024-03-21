@@ -3,9 +3,9 @@ version: '3.8'
 services:
   rpa-mit-payment:
     image: rpa-mit-payment-development
-    container_name: rpa-mit-payment-developer
+    container_name: rpa-mit-payment-development
     ports:
-      - "3001:80"
+      - "3003:80"
     volumes:
       - ./EST.MIT.Payment.Function:/home/dotnet/EST.MIT.Payment.Function
       - ./EST.MIT.Payment.Function.Tests:/home/dotnet/EST.MIT.Payment.Function.Tests
