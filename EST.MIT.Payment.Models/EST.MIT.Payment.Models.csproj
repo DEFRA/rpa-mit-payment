@@ -10,4 +10,9 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
   </ItemGroup>
+
+        <PropertyGroup>
+        <!-- Exclude the project from analysis -->
+        <SonarQubeExclude>true</SonarQubeExclude>
+    </PropertyGroup>
 </Project>
