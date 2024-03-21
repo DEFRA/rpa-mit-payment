@@ -37,5 +37,8 @@
   <ItemGroup>
     <ProjectReference Include="..\EST.MIT.Payment.Function\EST.MIT.Payment.Function.csproj" />
   </ItemGroup>
-
+    <PropertyGroup>
+        <!-- Exclude the project from analysis -->
+        <SonarQubeExclude>true</SonarQubeExclude>
+    </PropertyGroup>
 </Project>

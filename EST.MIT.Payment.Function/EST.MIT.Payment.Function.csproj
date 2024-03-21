@@ -36,4 +36,8 @@
     <ProjectReference Include="..\EST.MIT.Payment.Interfaces\EST.MIT.Payment.Interfaces.csproj" />
     <ProjectReference Include="..\EST.MIT.Payment.Models\EST.MIT.Payment.Models.csproj" />
   </ItemGroup>
+      <PropertyGroup>
+        <!-- Exclude the project from analysis -->
+        <SonarQubeExclude>true</SonarQubeExclude>
+    </PropertyGroup>
 </Project>
