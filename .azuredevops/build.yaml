@@ -46,7 +46,7 @@ extends:
       testProjectPath: "./EST.MIT.Payment.Function.Tests/EST.MIT.Payment.Function.Tests.csproj"
       manifestPath: "./EST.MIT.Payment.Function/obj/project.assets.json"
       frameworkVersion: "6.x"
-      imageRepoName: "rpa-mit-Payment"
+      imageRepoName: "rpa-mit-payment"
     appTestConfig:
       testFilePath: "./docker-compose.test.yaml"
     appDeployConfig:
