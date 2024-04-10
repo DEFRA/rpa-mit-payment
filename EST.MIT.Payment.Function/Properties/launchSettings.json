@@ -3,7 +3,10 @@
     "EST.MIT.Payment.Function": {
       "commandName": "Project",
       "commandLineArgs": "--port 7176",
-      "launchBrowser": false
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
