@@ -14,13 +14,14 @@ namespace EST.MIT.Payment.Services
             _serviceBus = serviceBus;
         }
 
-        public async Task CreateMessage(string status, string action, string message, string data)
+        public async Task CreateMessage(string id, string status, string action, string message, string data)
         {
             var eventRequest = new Event()
             {
                 Name = "Payments",
                 Properties = new EventProperties()
                 {
+                    Id = id,
                     Status = status,
                     Checkpoint = "Payment",
                     Action = new EventAction()

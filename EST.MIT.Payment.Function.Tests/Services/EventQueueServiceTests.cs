@@ -19,6 +19,7 @@ namespace EST.MIT.Payment.Function.Tests.Services
         public async Task CreateMessage_ValidArguments_CallsSendMessageAsync()
         {
             var eventQueueService = new EventQueueService(_mockServiceBus.Object);
+            const string id = "123";
             const string status = "new";
             const string action = "create";
             const string message = "payment request created successfully";
@@ -27,7 +28,7 @@ namespace EST.MIT.Payment.Function.Tests.Services
             var mockSender = new Mock<ServiceBusSender>();
             mockSender.Setup(x => x.SendMessageAsync(It.IsAny<ServiceBusMessage>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-            await eventQueueService.CreateMessage(status, action, message, data);
+            await eventQueueService.CreateMessage(id, status, action, message, data);
 
             _mockServiceBus.Verify(x => x.SendServiceBus(It.IsAny<string>()), Times.Once);
         }
