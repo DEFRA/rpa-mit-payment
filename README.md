@@ -98,9 +98,9 @@ docker compose up
 
 ## Usage / Endpoints
 
-### Payment Creation
-Function Trigger: ServiceBusTrigger
-##### Endpoint
-Uses the Service Bus queue trigger named from the environment variable `%PaymentQueueName%`
-##### Action
-Receives payment requests and processes them. If the request is valid, it sends it forward using the service bus after performing some validations. Errors during processing are logged, and messages are sent to an event queue service indicating the status of the payment processing.
+- ### Payment Creation
+	Function Trigger: ServiceBusTrigger
+	#### Endpoint
+	Uses the Service Bus queue trigger named from the environment variable `%PaymentQueueName%`
+	#### Action
+	Receives payment requests and processes them. If the request is valid, it sends it forward using the service bus after performing some validations. Errors during processing are logged, and messages are sent to an event queue service indicating the status of the payment processing.
