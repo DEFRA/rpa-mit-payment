@@ -1,4 +1,4 @@
-# rpa-mit-payment
+# Payment Generation
 
 This repository contains an azure function with a Service Bus trigger, the messages to the service bus are sent via other services, its use is as a method of sending complete validated invoices to the system that can produce a payment.
 
@@ -86,16 +86,6 @@ func start --port 7072
 ```
 
 ---
-## Running in Docker
-
-To create the application as a docker container run the following command in the parent directory.
-
-```bash
-docker compose up
-```
-
----
-
 ## Usage / Endpoints
 
 ### Payment Creation
