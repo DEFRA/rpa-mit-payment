@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 .vscode/
+*.env
 
 local.settings.json
 secrets.json
